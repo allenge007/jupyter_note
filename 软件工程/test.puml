@@ -1,0 +1,22 @@
+@startuml MicrowaveStateDiagram
+!theme mono
+
+title 微波炉控制系统状态图
+
+[*] --> Idle
+
+Idle : 显示“准备就绪”
+Idle --> Setting : 用户选择功率和输入时间
+Setting : 等待用户启动
+Setting --> Cooking : 按下开始按钮且门闭合
+Cooking : 定时器启动计时
+Cooking --> Warning : 运行中门打开 (安全中断)
+Warning : 停止定时器，显示“门未关”
+Warning --> Idle : 门重新关闭后，复位系统
+Cooking --> Finished : 定时器到时
+Finished : 蜂鸣器响，显示“烹饪完成”
+Finished --> Idle : 完成后复位
+
+Cooking --> Idle : 用户按下停止按钮
+
+@enduml

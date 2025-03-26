@@ -15,6 +15,7 @@
 
 ```plantuml
 @startuml MicrowaveDomainModel
+!theme mono
 title 微波炉控制系统领域模型
 scale 0.6
 
@@ -96,6 +97,8 @@ MicrowaveOven "1" *-- "1" Buzzer
 
 ```plantuml
 @startuml MicrowaveStateDiagram
+!theme mono
+
 title 微波炉控制系统状态图
 
 [*] --> Idle
