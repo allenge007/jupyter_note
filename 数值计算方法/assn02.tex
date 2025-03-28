@@ -1,0 +1,892 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage{xeCJK}
+    \usepackage{gensymb}
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \makeatletter
+    \newsavebox\pandoc@box
+    \newcommand*\pandocbounded[1]{%
+      \sbox\pandoc@box{#1}%
+      % scaling factors for width and height
+      \Gscale@div\@tempa\textheight{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+      \Gscale@div\@tempb\linewidth{\wd\pandoc@box}%
+      % select the smaller of both
+      \ifdim\@tempb\p@<\@tempa\p@
+        \let\@tempa\@tempb
+      \fi
+      % scaling accordingly (\@tempa < 1)
+      \ifdim\@tempa\p@<\p@
+        \scalebox{\@tempa}{\usebox\pandoc@box}%
+      % scaling not needed, use as it is
+      \else
+        \usebox{\pandoc@box}%
+      \fi
+    }
+    \makeatother
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{assn02}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \section{1(3)}\label{section}
+
+\[
+f(1)=0,\quad f(-1)=-3,\quad f(2)=4.
+\]
+
+\[
+x_0=1,\quad x_1=-1,\quad x_2=2
+\]
+
+使用牛顿插值法。
+
+\subsection{Answer}\label{answer}
+
+牛顿插值多项式可表示为
+
+\[
+P(x) = f(x_0) + f[x_0,x_1](x-x_0) + f[x_0,x_1,x_2](x-x_0)(x-x_1).
+\]
+
+\[
+\begin{aligned}
+f[x_0,x_1] &= \frac{-3-0}{-1-1} = \frac{3}{2} \\
+f[x_1,x_2] &= \frac{4-(-3)}{2-(-1)} = \frac{7}{3} \\
+f[x_0,x_1,x_2] &= \frac{\frac{7}{3}-\frac{3}{2}}{2-1} = \frac{5}{6}
+\end{aligned}
+\]
+
+因此有
+
+\[
+\boxed{
+P(x) = \frac{3}{2}(x-1) + \frac{5}{6}(x-1)(x+1)
+}
+\]
+
+    \section{3}\label{section}
+
+给出 \(\cos x, 0\le x\le 90\degree\) 的函数表，步长
+\(h = 1' = (\frac{1}{60})\degree\)。若函数表具有 5
+位有效数字，研究用线性插值求 \(\cos x\) 近似值时的总误差界。
+
+\subsection{Answer}\label{answer}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{舍入误差}
+
+  由于表格中的数字保留 5 位有效数字，舍入误差界限为 \[
+  \delta \le 0.5 \times 10^{-5},
+  \]
+\item
+  \textbf{线性插值误差}
+
+  当在相邻的表格点 \(z_i\) 与 \(z_{i+1}\) 之间（间距
+  \(h = 1'\)）使用线性插值时，对于一个 \(C^2\) 函数
+  \(f(z)=\cos z\)，插值误差满足 \[
+  E_{\text{interp}} \le \frac{M}{8}(z_{i+1}-z_i)^2,
+  \] 其中 \[
+  M = \max_{z\in[z_i,\,z_{i+1}]} |f''(z)|.
+  \]
+
+  \(f(z) = \cos z\) 时，其二阶导数为 \(f'\,'(z) = -\cos z,\) 因此有
+  \(|f''(z)| \le 1\)。
+
+  \(h = 1' = \pi/10800 \, \rm rad\)，则 \[
+  E_{\text{interp}} \le \frac{1}{8}\left(\frac{\pi}{10800}\right)^2.
+  \]
+
+  计算得 \[
+  \left(\frac{\pi}{10800}\right)^2 = \frac{\pi^2}{10800^2} \approx \frac{9.87}{116640000} \approx 8.46\times 10^{-8},
+  \] 所以 \[
+  E_{\text{interp}} \le \frac{8.46\times 10^{-8}}{8} \approx 1.06\times 10^{-8}.
+  \]
+\item
+  \textbf{总误差界}
+
+  \[
+  E_{\text{total}} \lesssim \delta + E_{\text{interp}} \approx 5\times 10^{-6} + 1.06\times 10^{-8},
+  \] 因此，总误差界主要由舍入误差主导。
+
+  最终我们有 \[
+  \boxed{E_{\text{total}} \lesssim 5\times 10^{-6}.}
+  \]
+\end{enumerate}
+
+    \section{4(2)}\label{section}
+
+设 \(x_0,x_1,\dots,x_n\) 是互异节点，求证对于
+\(k = 1, 2, \cdots, n\)，有 \[
+\sum_{j=0}^{n}\bigl(x_j-x\bigr)^k\ell_j(x) \equiv 0.
+\]
+
+\subsection{Proof}\label{proof}
+
+\[
+\begin{aligned}
+\sum_{j = 0}^n(x_j - x)^k\ell_j(x)&\equiv
+\sum_{j = 0}^n\ell_j(x)\sum_{m = 0}^k(-1)^mx^mx_j^{k - m}
+\end{aligned}
+\]
+
+由公式 2.17 知， \[
+\sum_{i = 0}^nx_i^k\ell_i(x)\equiv x^k
+\]
+
+因此，
+
+\[
+\begin{aligned}
+\sum_{j = 0}^n(x_j - x)^k\ell_j(x)&\equiv
+\sum_{m = 0}^k\sum_{j = 0}^n(-1)^mx^mx_j^{k - m}\ell_j(x) \\ &\equiv
+\sum_{m = 0}^k(-1)^mx^m\sum_{j = 0}^nx_j^{k - m}\ell_j(x)\\ &\equiv
+\sum_{m = 0}^k (-1)^mx^mx^{k-m} \\ &\equiv 
+(x - x)^k \\ &\equiv 
+0
+\end{aligned}
+\]
+
+    \section{6}\label{section}
+
+给出区间 \[
+-4 \le x \le 4
+\] 上的等距函数表，用二次插值来近似 \(f(x)=e^x\)，并要求截断误差不超过
+\(10^{-6}.\) 问函数表的步长 \(h\) 应为多少？
+
+\subsection{Answer}\label{answer}
+
+对于在三个节点 \(x_0,\, x_1,\, x_2\)进行二次插值，在区间 \([x_0,x_2]\)
+内任一点 \(x\) 的插值误差为 \[
+R(x)=\frac{f^{(3)}(\xi)}{3!}(x-x_0)(x-x_1)(x-x_2),
+\] 其中 \(\xi\) 取自 \([x_0,x_2]\) 内的某一点，节点是等距的，且步长为
+\(h\)。
+
+设三个连续节点为 \[
+x_0,\quad x_1=x_0+h,\quad x_2=x_0+2h.
+\] 设 \[
+t=x-x_0,\quad \text{其中 } t\in[0,2h].
+\] 则误差可以写成 \[
+R(t)=\frac{f^{(3)}(\xi)}{6}\, t\,(t-h)\,(t-2h).
+\]
+
+当 \(t\in[0,2h]\) \[
+|P(t)|=|t\,(t-h)\,(t-2h)|
+\] 的最大值。经过求导可以发现，绝对值最大处出现在 \[
+t = h\Bigl(1\pm \frac{1}{\sqrt{3}}\Bigr)
+\] 处，因此有 \[
+\max_{t\in[0,2h]}|t\,(t-h)\,(t-2h)| = \frac{2h^3}{3\sqrt{3}}.
+\]
+
+于是，任意子区间上的最大插值误差限为 \[
+|R(x)| \le \frac{M_3}{6} \cdot \frac{2h^3}{3\sqrt{3}} = \frac{M_3\, h^3}{9\sqrt{3}},
+\] 其中 \[
+M_3 = \max_{x\in[-4,4]}|f^{(3)}(x)|.
+\]
+
+由于 \[
+f(x)=e^x,\quad f^{(3)}(x)=e^x,
+\] 故 \[
+|f^{(3)}(x)|= e^x.
+\] 在区间 \([-4,4]\) 上，最大值出现在 \(x=4\) 处，因此 \[
+M_3 = e^4.
+\]
+
+故截断误差满足 \[
+\frac{e^4\, h^3}{9\sqrt{3}} \le 10^{-6}.
+\] 解得 \[
+h^3 \le \frac{9\sqrt{3}\,10^{-6}}{e^4}.
+\] 取立方根可得 \[
+\boxed{
+h \le \left(\frac{9\sqrt{3}\,10^{-6}}{e^4}\right)^{\frac{1}{3}}.
+}
+\]
+
+    \section{7}\label{section}
+
+证明 n 阶均差有下列性质
+
+\subsection{性质(1)}\label{ux6027ux8d281}
+
+\textbf{描述:}\\
+若 \[
+F(x)= c\, f(x),
+\] 则 \[
+F[x_0,x_1,\dots,x_n] = c\,f[x_0,x_1,\dots,x_n].
+\]
+
+\textbf{证明:}\\
+使用数学归纳法。
+
+\begin{itemize}
+\item
+  \textbf{归纳基 (\(n=0\))}:\\
+  \[
+  F[x_0] = F(x_0) = c\, f(x_0) = c\, f[x_0].
+  \] 因此性质（1）对 \(n=0\) 成立.
+\item
+  \textbf{归纳步:}\\
+  假设性质（1）对任意 \(0\le k \le n-1\) 成立，即证明 \[
+  F[x_0,x_1,\dots,x_n] = \frac{F[x_1,x_2,\dots,x_n] - F[x_0,x_1,\dots,x_{n-1}]}{x_n - x_0}.
+  \] 根据归纳假设，我们有 \[
+  F[x_1,x_2,\dots,x_n] = c \, f[x_1,x_2,\dots,x_n] \quad\text{和}\quad F[x_0,x_1,\dots,x_{n-1}] = c\, f[x_0,x_1,\dots,x_{n-1}].
+  \] 因此， \[
+  F[x_0,x_1,\dots,x_n] = \frac{ c\, f[x_1,x_2,\dots,x_n] - c\, f[x_0,x_1,\dots,x_{n-1}]}{x_n-x_0} = c\, \frac{f[x_1,x_2,\dots,x_n]- f[x_0,x_1,\dots,x_{n-1}]}{x_n-x_0}.
+  \] 根据 \(f[x_0,x_1,\dots,x_n]\) 的定义，有 \[
+  F[x_0,x_1,\dots,x_n] = c\,f[x_0,x_1,\dots,x_n].
+  \]
+\end{itemize}
+
+性质（1）得证。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{性质 (2)}\label{ux6027ux8d28-2}
+
+\textbf{描述:}\\
+若 \[
+F(x) = f(x)+g(x),
+\] 则 \[
+F[x_0,x_1,\dots,x_n]= f[x_0,x_1,\dots,x_n]+g[x_0,x_1,\dots,x_n].
+\]
+
+\textbf{证明:}\\
+再次运用数学归纳法。
+
+\begin{itemize}
+\item
+  \textbf{归纳基 (\(n=0\))}:\\
+  \[
+  F[x_0] = F(x_0)= f(x_0)+g(x_0)= f[x_0]+g[x_0].
+  \] 因此性质（2）对 \(n=0\) 成立.
+\item
+  \textbf{归纳步:}\\
+  假设性质（2）对 \(0\le k \le n-1\) 成立，根据 \[
+  F[x_0,x_1,\dots,x_n] = \frac{F[x_1,x_2,\dots,x_n]-F[x_0,x_1,\dots,x_{n-1}]}{x_n - x_0}.
+  \] 使用归纳假设 \[
+  F[x_1,x_2,\dots,x_n] = f[x_1,x_2,\dots,x_n] + g[x_1,x_2,\dots,x_n],
+  \] 以及 \[
+  F[x_0,x_1,\dots,x_{n-1}] = f[x_0,x_1,\dots,x_{n-1}] + g[x_0,x_1,\dots,x_{n-1}].
+  \] 带入得到， \[
+  \begin{aligned}
+  F[x_0,x_1,\dots,x_n] &= \frac{\Bigl(f[x_1,x_2,\dots,x_n] + g[x_1,x_2,\dots,x_n]\Bigr) - \Bigl(f[x_0,x_1,\dots,x_{n-1}] + g[x_0,x_1,\dots,x_{n-1}]\Bigr)}{x_n-x_0} \\
+  &= \frac{f[x_1,x_2,\dots,x_n] - f[x_0,x_1,\dots,x_{n-1}]}{x_n-x_0} + \frac{g[x_1,x_2,\dots,x_n] - g[x_0,x_1,\dots,x_{n-1}]}{x_n-x_0} \\
+  &= f[x_0,x_1,\dots,x_n] + g[x_0,x_1,\dots,x_n].
+  \end{aligned}
+  \]
+\end{itemize}
+
+性质（2）得证。
+
+    \section{8}\label{section}
+
+已知 \[
+f(x)=x^7+x^4+3x+1,
+\]
+
+求
+
+\[
+f[2^0,2^1,\dots,2^7] \quad \text{and} \quad f[2^0,2^1,\dots,2^8].
+\]
+
+\subsection{Answer}\label{answer}
+
+根据 n 阶分差定义我们有
+
+\[
+f[x_0, x_1, \cdots, x_n]=\frac{f^{(n)}(\xi)}{n!}
+\]
+
+其中 \(\xi \in [x_0, x_n]\)
+
+对于 \(f(x)=x^7+x^4+3x+1\)
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{\(2^0,2^1,\dots,2^7\):} 7 阶导为 \(7!\) 故 \[
+  f[2^0,2^1,\dots,2^7] = 1.
+    \]
+\item
+  \textbf{\(2^0,2^1,\dots,2^8\):} 8 阶导为 \(0\) 故 \[
+  f[2^0,2^1,\dots,2^8] = 0.
+    \]
+\end{enumerate}
+
+因此
+
+\[
+\boxed{f[2^0,2^1,\dots,2^7] = 1 \quad\text{and}\quad f[2^0,2^1,\dots,2^8] = 0.}
+\]
+
+    \section{9}\label{section}
+
+证明 \[
+\Delta\bigl(f_k g_k\bigr) = f_k\,\Delta g_k + g_{k+1}\,\Delta f_k.
+\]
+
+\subsection{Proof}\label{proof}
+
+根据差分的定义我们有 \[
+   \Delta\bigl(f_k g_k\bigr) = f_{k+1}g_{k+1} - f_k g_k.
+   \]
+
+故 \[
+   f_{k+1}g_{k+1} - f_kg_k = \Bigl[f_{k+1}g_{k+1} - f_k g_{k+1}\Bigr] + \Bigl[f_k g_{k+1} - f_k g_k\Bigr].
+   \]
+
+\[
+   f_{k+1}g_{k+1} - f_kg_{k+1} = g_{k+1}\bigl(f_{k+1} - f_k\bigr) = g_{k+1}\,\Delta f_k,
+   \]
+
+\[
+   f_k g_{k+1} - f_k g_k = f_k\bigl(g_{k+1} - g_k\bigr) = f_k\,\Delta g_k.
+   \]
+
+\[
+   \Delta\bigl(f_k g_k\bigr) = g_{k+1}\,\Delta f_k + f_k\,\Delta g_k,
+   \] 因此 \[
+   \boxed{\Delta\bigl(f_k g_k\bigr) = f_k\,\Delta g_k + g_{k+1}\,\Delta f_k.}
+   \]
+
+原式得证。
+
+    \section{10}\label{section}
+
+证明 \[
+\sum_{k = 0}^{n - 1}f_k\Delta g_k = f_n g_n - f_0 g_0 - \sum_{k = 0}^{n - 1}g_{k + 1}\Delta f_k,
+\]
+
+\subsection{Proof}\label{proof}
+
+裂项得到 \[
+   f_n g_n - f_0 g_0 = \sum_{k=0}^{n-1}\Bigl( f_{k+1}g_{k+1} - f_k g_k \Bigr).
+   \]
+
+又因为 \[
+   \Delta(f_k g_k) = f_k\,\Delta g_k + g_{k+1}\,\Delta f_k.
+   \] 所以 \[
+   f_{k+1}g_{k+1} - f_k g_k = f_k\Delta g_k + g_{k+1}\Delta f_k.
+   \]
+
+代入得到 \[
+   f_n g_n - f_0 g_0 = \sum_{k=0}^{n-1}\Bigl( f_k\Delta g_k + g_{k+1}\Delta f_k\Bigr)
+   = \sum_{k=0}^{n-1}f_k\Delta g_k + \sum_{k=0}^{n-1} g_{k+1}\Delta f_k.
+   \]
+
+因此 \[
+   \boxed{
+   \sum_{k=0}^{n-1}f_k\Delta g_k = f_n g_n - f_0 g_0 - \sum_{k=0}^{n-1} g_{k+1}\Delta f_k.}
+   \]
+
+原式得证。
+
+    \section{11}\label{section}
+
+证明
+
+\[
+\sum_{j = 0}^{n - 1} \Delta^2 y_j = \Delta y_n - \Delta y_0
+\]
+
+\subsection{Proof}\label{proof}
+
+裂项得到
+
+\[
+\Delta y_n - \Delta y_0 = \sum_{j = 0}^{n - 1}\Delta y_{j + 1} - \Delta y_j = \sum_{j = 0}^{n - 1}\Delta^2y_j
+\]
+
+原式得证。
+
+    \section{12}\label{section}
+
+给定多项式 \[
+f(x)=\sum_{i=0}^n a_i x^i = a_n\,(x-x_1)(x-x_2)\cdots (x-x_n)
+\] 有 n 个互不相同的根。证明
+
+\[
+\sum \frac{x_j^k}{f'(x_j)} = 
+\begin{cases}
+0, & 0≤k≤n-2 \\
+a_n^{-1}, & k=n-1
+\end{cases}
+\]
+
+\subsection{Proof}\label{proof}
+
+设
+
+\[
+\omega_n (x) = (x - x_1)(x - x_2)\cdots(x - x_n)
+\]
+
+原式可化为
+
+\[
+\sum_{j = 1}^n\frac{x_j^k}{f'(x_j)} = \sum_{j = 1}^n\frac{x_j^k}{a_n\omega_n'(x_j)}
+\]
+
+\[
+\omega_n'(x_j)=\prod_{k\neq j}(x_j - x_k)
+\]
+
+令 \(g(x) = x^k\)，则
+\(g[\dots]=\sum_{j=1}^n\frac{x_j^k}{\omega'_n(x_j)}\)
+
+又因为
+
+\[
+g[\cdots]=\frac{g^{(n-1)}(\xi)}{(n-1)!}
+\]
+
+故
+
+\[
+原式=\frac{1}{a_n}g[\dots]=\begin{cases}
+0, &k \le n-2 \\
+a_n^{-1}, &\rm otherwise
+\end{cases}
+\]
+
+原式得证。
+
+    \section{13}\label{section}
+
+构造一个 3 次的多项式 \(P(x)\)，使得它满足 \[
+\begin{aligned}
+P(x_0) &= f(x_0), \\
+P'(x_0) &= f'(x_0), \\
+P''(x_0) &= f''(x_0), \\
+P(x_1) &= f(x_1).
+\end{aligned}
+\]
+
+\subsection{Answer}\label{answer}
+
+令 \[
+P(x) = a_0 + a_1 (x-x_0) + a_2 (x-x_0)^2 + a_3 (x-x_0)^3.
+\] 那么有 \[
+\begin{aligned}
+P(x_0) &= a_0,\\[1mm]
+P'(x) &= a_1 + 2a_2 (x-x_0) + 3a_3 (x-x_0)^2,\quad \text{所以} \quad P'(x_0)=a_1,\\[1mm]
+P''(x) &= 2a_2 + 6a_3 (x-x_0),\quad \text{所以} \quad P''(x_0)=2a_2.
+\end{aligned}
+\]
+
+由给定条件可得 \[
+\begin{aligned}
+a_0 &= f(x_0),\\[1mm]
+a_1 &= f'(x_0),\\[1mm]
+2a_2 &= f''(x_0) \quad \Longrightarrow \quad a_2 = \frac{f''(x_0)}{2}.
+\end{aligned}
+\]
+
+另外， \[
+P(x_1)= f(x_1).
+\] 由于 \[
+P(x_1) = a_0 + a_1 (x_1-x_0) + a_2 (x_1-x_0)^2 + a_3 (x_1-x_0)^3,
+\] 将 \(a_0, a_1, a_2\) 的表达式代入，得到 \[
+f(x_0) + f'(x_0)(x_1-x_0) + \frac{f''(x_0)}{2}(x_1-x_0)^2 + a_3 (x_1-x_0)^3 = f(x_1).
+\] 求解 \(a_3\) 得 \[
+a_3 = \frac{f(x_1)- f(x_0) - f'(x_0)(x_1-x_0) - \frac{f''(x_0)}{2}(x_1-x_0)^2}{(x_1-x_0)^3}.
+\]
+
+因此，所求的多项式为 \[
+\boxed{
+f(x_0) + f'(x_0)(x-x_0) + \frac{f''(x_0)}{2}(x-x_0)^2 + \frac{f(x_1)- f(x_0) - f'(x_0)(x_1-x_0) - \frac{f''(x_0)}{2}(x_1-x_0)^2}{(x_1-x_0)^3}(x-x_0)^3.
+}
+\]
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
