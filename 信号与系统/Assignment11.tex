@@ -479,17 +479,25 @@ X(e^{j\omega}) = \begin{cases}
 
 \subsection{Answer}\label{answer}
 
-观察给定的 \(X(e^{j\omega})\) 可看作两个方波函数的差： - 令 \[
+观察给定的 \(X(e^{j\omega})\) 可看作两个方波函数的差：
+
+\begin{itemize}
+\tightlist
+\item
+  令 \[
   X_1(e^{j\omega}) = \begin{cases}
   1, & |\omega| \le \frac{3\pi}{4},\\[1mm]
   0, & \text{otherwise},
   \end{cases}
-  \] - 令 \[
+  \]
+\item
+  令 \[
   X_2(e^{j\omega}) = \begin{cases}
   1, & |\omega| \le \frac{\pi}{4},\\[1mm]
   0, & \text{otherwise}.
   \end{cases}
   \]
+\end{itemize}
 
 则显然有 \[
 X(e^{j\omega}) = X_1(e^{j\omega}) - X_2(e^{j\omega}).
@@ -501,11 +509,19 @@ X(e^{j\omega}) = X_1(e^{j\omega}) - X_2(e^{j\omega}).
 \tilde x[n] = \frac{\sin(W n)}{\pi n},\quad n\ne0,\quad \tilde x[0] = \frac{W}{\pi}.
 \]
 
-因此： - 对于 \(X_1(e^{j\omega})\)（这里 \(W=\frac{3\pi}{4}\)）有 \[
+因此：
+
+\begin{itemize}
+\tightlist
+\item
+  对于 \(X_1(e^{j\omega})\)（这里 \(W=\frac{3\pi}{4}\)）有 \[
   x_1[n] = \frac{\sin\Bigl(\frac{3\pi n}{4}\Bigr)}{\pi n}, \quad n\ne 0,\quad x_1[0] = \frac{3\pi/4}{\pi} = \frac{3}{4}\,.
-  \] - 对于 \(X_2(e^{j\omega})\)（这里 \(W=\frac{\pi}{4}\)）有 \[
+  \]
+\item
+  对于 \(X_2(e^{j\omega})\)（这里 \(W=\frac{\pi}{4}\)）有 \[
   x_2[n] = \frac{\sin\Bigl(\frac{\pi n}{4}\Bigr)}{\pi n}, \quad n\ne 0,\quad x_2[0] = \frac{\pi/4}{\pi} = \frac{1}{4}\,.
   \]
+\end{itemize}
 
 由频域的线性叠加（差分）关系，其对应的时域信号为
 
