@@ -4,6 +4,7 @@
     \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
     \usepackage{xeCJK}
     \usepackage{mathtools}
+
     % Basic figure setup, for now with no caption control since it's done
     % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
     \usepackage{graphicx}
@@ -924,53 +925,44 @@ h_1        & 2(h_1+h_2) & h_2\\[1mm]
 利用 Python 代码分别求解这两种边界条件数值解：
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{30}{\boxspacing}
+\prompt{In}{incolor}{106}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{c+c1}{\PYZsh{} 给定数据}
 \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{l+m+mf}{0.30}\PY{p}{,} \PY{l+m+mf}{0.39}\PY{p}{,} \PY{l+m+mf}{0.45}\PY{p}{,} \PY{l+m+mf}{0.53}\PY{p}{]}\PY{p}{)}
 \PY{n}{y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.5000}\PY{p}{,} \PY{l+m+mf}{0.5477}\PY{p}{,} \PY{l+m+mf}{0.6245}\PY{p}{,} \PY{l+m+mf}{0.6708}\PY{p}{,} \PY{l+m+mf}{0.7280}\PY{p}{]}\PY{p}{)}
 \PY{n}{n\PYZus{}nodes} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x}\PY{p}{)}
-
 \PY{c+c1}{\PYZsh{} 计算各区间步长和差商 d\PYZus{}j}
 \PY{n}{h} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{diff}\PY{p}{(}\PY{n}{x}\PY{p}{)}  \PY{c+c1}{\PYZsh{} [0.05, 0.09, 0.06, 0.08]}
 \PY{n}{d} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{diff}\PY{p}{(}\PY{n}{y}\PY{p}{)} \PY{o}{/} \PY{n}{h}
-
 \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} (一) 夹紧边界条件 \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
 \PY{c+c1}{\PYZsh{} 已知: S\PYZsq{}(x0)=1.0000, S\PYZsq{}(x4)=0.6868.}
 \PY{n}{A\PYZus{}clamped} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
 \PY{n}{b\PYZus{}clamped} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}
-
 \PY{c+c1}{\PYZsh{} 边界左： 2h0*m0 + h0*m1 = 6(d0 \PYZhy{} S\PYZsq{}(x0))}
 \PY{n}{A\PYZus{}clamped}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
 \PY{n}{A\PYZus{}clamped}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
 \PY{n}{b\PYZus{}clamped}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(}\PY{n}{d}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{l+m+mf}{1.0000}\PY{p}{)}
-
 \PY{c+c1}{\PYZsh{} 内节点 j=1,2,3}
 \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{:}
     \PY{n}{A\PYZus{}clamped}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
     \PY{n}{A\PYZus{}clamped}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{j}\PY{p}{]}   \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{+} \PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}
     \PY{n}{A\PYZus{}clamped}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{p}{]}
     \PY{n}{b\PYZus{}clamped}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(}\PY{n}{d}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{d}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
-    
 \PY{c+c1}{\PYZsh{} 边界右： h3*m3 + 2h3*m4 = 6(S\PYZsq{}(x4)\PYZhy{}d3), S\PYZsq{}(x4)=0.6868}
 \PY{n}{A\PYZus{}clamped}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}
 \PY{n}{A\PYZus{}clamped}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}
 \PY{n}{b\PYZus{}clamped}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(}\PY{l+m+mf}{0.6868} \PY{o}{\PYZhy{}} \PY{n}{d}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
-
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{夹紧边界条件下的系数矩阵 A\PYZus{}clamped:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{A\PYZus{}clamped}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{右侧向量 b\PYZus{}clamped:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{b\PYZus{}clamped}\PY{p}{)}
-
 \PY{n}{m\PYZus{}clamped} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{solve}\PY{p}{(}\PY{n}{A\PYZus{}clamped}\PY{p}{,} \PY{n}{b\PYZus{}clamped}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{夹紧条件下求得 m = [m0, m1, m2, m3, m4]:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{m\PYZus{}clamped}\PY{p}{)}
-
 \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} (二) 自然边界条件 \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
 \PY{c+c1}{\PYZsh{} 自然条件： m0 = m4 = 0, 只需解内节点 m1, m2, m3.}
 \PY{n}{A\PYZus{}natural} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
 \PY{n}{b\PYZus{}natural} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
-
 \PY{c+c1}{\PYZsh{} 内节点 j=1,2,3}
 \PY{c+c1}{\PYZsh{} j=1:}
 \PY{n}{A\PYZus{}natural}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
@@ -985,18 +977,15 @@ h_1        & 2(h_1+h_2) & h_2\\[1mm]
 \PY{n}{A\PYZus{}natural}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}
 \PY{n}{A\PYZus{}natural}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{h}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{+} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
 \PY{n}{b\PYZus{}natural}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(}\PY{n}{d}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{d}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
-
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{自然边界条件下的系数矩阵 A\PYZus{}natural:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{A\PYZus{}natural}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{右侧向量 b\PYZus{}natural:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{b\PYZus{}natural}\PY{p}{)}
-
 \PY{n}{m\PYZus{}natural\PYZus{}inner} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{solve}\PY{p}{(}\PY{n}{A\PYZus{}natural}\PY{p}{,} \PY{n}{b\PYZus{}natural}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} m0 = m4 = 0, 构造完整向量}
 \PY{n}{m\PYZus{}natural} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{hstack}\PY{p}{(}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{m\PYZus{}natural\PYZus{}inner}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{自然条件下求得 m = [m0, m1, m2, m3, m4]:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{m\PYZus{}natural}\PY{p}{)}
-
 \PY{c+c1}{\PYZsh{}\PYZhy{}\PYZhy{}\PYZhy{} 定义三次样条评价函数 \PYZhy{}\PYZhy{}\PYZhy{}}
 \PY{k}{def} \PY{n+nf}{eval\PYZus{}spline}\PY{p}{(}\PY{n}{x\PYZus{}val}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{)}\PY{p}{:}
     \PY{c+c1}{\PYZsh{} 找所在区间 [x\PYZus{}j, x\PYZus{}\PYZob{}j+1\PYZcb{}]}
@@ -1018,7 +1007,6 @@ h_1        & 2(h_1+h_2) & h_2\\[1mm]
     \PY{c+c1}{\PYZsh{} 二阶导数}
     \PY{n}{Sx2} \PY{o}{=} \PY{n}{A}\PY{o}{*}\PY{n}{m}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{B}\PY{o}{*}\PY{n}{m}\PY{p}{[}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}
     \PY{k}{return} \PY{n}{Sx}\PY{p}{,} \PY{n}{Sx1}\PY{p}{,} \PY{n}{Sx2}
-
 \PY{k}{def} \PY{n+nf}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{num}\PY{o}{=}\PY{l+m+mi}{400}\PY{p}{)}\PY{p}{:}
     \PY{n}{x\PYZus{}plot} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{num}\PY{p}{)}
     \PY{n}{S\PYZus{}vals} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros\PYZus{}like}\PY{p}{(}\PY{n}{x\PYZus{}plot}\PY{p}{)}
@@ -1027,11 +1015,9 @@ h_1        & 2(h_1+h_2) & h_2\\[1mm]
     \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{xv} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{x\PYZus{}plot}\PY{p}{)}\PY{p}{:}
         \PY{n}{S\PYZus{}vals}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{S1\PYZus{}vals}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{S2\PYZus{}vals}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{eval\PYZus{}spline}\PY{p}{(}\PY{n}{xv}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{)}
     \PY{k}{return} \PY{n}{x\PYZus{}plot}\PY{p}{,} \PY{n}{S\PYZus{}vals}\PY{p}{,} \PY{n}{S1\PYZus{}vals}\PY{p}{,} \PY{n}{S2\PYZus{}vals}
-
 \PY{c+c1}{\PYZsh{} 分别评价两种边界条件下的样条}
 \PY{n}{x\PYZus{}plot}\PY{p}{,} \PY{n}{S\PYZus{}clamped}\PY{p}{,} \PY{n}{S1\PYZus{}clamped}\PY{p}{,} \PY{n}{S2\PYZus{}clamped} \PY{o}{=} \PY{n}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{m\PYZus{}clamped}\PY{p}{)}
 \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{S\PYZus{}natural}\PY{p}{,} \PY{n}{S1\PYZus{}natural}\PY{p}{,} \PY{n}{S2\PYZus{}natural} \PY{o}{=} \PY{n}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{m\PYZus{}natural}\PY{p}{)}
-
 \PY{c+c1}{\PYZsh{}\PYZhy{}\PYZhy{}\PYZhy{} 绘图：以两列方式并排比较 \PYZhy{}\PYZhy{}\PYZhy{}}
 \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{,} \PY{n}{sharex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} 第一列：夹紧条件下}
@@ -1039,29 +1025,23 @@ h_1        & 2(h_1+h_2) & h_2\\[1mm]
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ko}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nodes}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Clamped Spline: \PYZdl{}S(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}plot}\PY{p}{,} \PY{n}{S1\PYZus{}clamped}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Clamped Spline: \PYZdl{}S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}plot}\PY{p}{,} \PY{n}{S2\PYZus{}clamped}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Clamped Spline: \PYZdl{}S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{;} \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-
 \PY{c+c1}{\PYZsh{} 第二列：自然条件下}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}plot}\PY{p}{,} \PY{n}{S\PYZus{}natural}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ko}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nodes}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Natural Spline: \PYZdl{}S(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}plot}\PY{p}{,} \PY{n}{S1\PYZus{}natural}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Natural Spline: \PYZdl{}S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}plot}\PY{p}{,} \PY{n}{S2\PYZus{}natural}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Natural Spline: \PYZdl{}S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{;} \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-
 \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
 \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
@@ -1127,7 +1107,7 @@ h_1        & 2(h_1+h_2) & h_2\\[1mm]
 使用 python 分别用两种方法进行插值：
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{33}{\boxspacing}
+\prompt{In}{incolor}{108}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{c+c1}{\PYZsh{} 给定数据}
 \PY{n}{x\PYZus{}nodes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{,} \PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{36}\PY{p}{,} \PY{l+m+mi}{49}\PY{p}{,} \PY{l+m+mi}{64}\PY{p}{]}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{float}\PY{p}{)}
@@ -1155,15 +1135,15 @@ h_1        & 2(h_1+h_2) & h_2\\[1mm]
     \PY{n}{A}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{j}\PY{p}{]}   \PY{o}{=} \PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}
     \PY{n}{A}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{p}{]}
     \PY{n}{b\PYZus{}vec}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6}\PY{o}{*}\PY{p}{(}\PY{n}{d}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{d}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
-\PY{c+c1}{\PYZsh{} 边界：夹紧条件 S\PYZsq{}(x0)=1, S\PYZsq{}(x63)=S\PYZsq{}(64)=0.6868}
+\PY{c+c1}{\PYZsh{} 边界：夹紧条件 S\PYZsq{}(x0)=2.0, S\PYZsq{}(x63)=S\PYZsq{}(64)=1/16}
 \PY{c+c1}{\PYZsh{} 对左端点}
 \PY{n}{A}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
 \PY{n}{A}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-\PY{n}{b\PYZus{}vec}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6}\PY{o}{*}\PY{p}{(}\PY{n}{d}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mf}{1.0}\PY{p}{)}
+\PY{n}{b\PYZus{}vec}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6}\PY{o}{*}\PY{p}{(}\PY{n}{d}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mf}{2.0}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} 对右端点}
 \PY{n}{A}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
 \PY{n}{A}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{h}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
-\PY{n}{b\PYZus{}vec}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{0.6868}\PY{o}{\PYZhy{}}\PY{n}{d}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n}{b\PYZus{}vec}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{16}\PY{o}{\PYZhy{}}\PY{n}{d}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} 求解 m 向量}
 \PY{n}{m} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{solve}\PY{p}{(}\PY{n}{A}\PY{p}{,} \PY{n}{b\PYZus{}vec}\PY{p}{)}
 \PY{c+c1}{\PYZsh{} 定义样条评价函数（前面已经给出公式）}
@@ -1237,9 +1217,136 @@ h_1        & 2(h_1+h_2) & h_2\\[1mm]
 \item
   在区间 \([0, 64]\) 上，\(S(x)\) 的误差明显更小。
 \item
-  在区间 \([0, 1]\) 上，\(L_8(x)\) 的误差略小于 \(S(x)\)。
+  在区间 \([0, 1]\) 上，当 \(S'(x) = 2.0\) 时，\(S(x)\) 的误差略小于
+  \(L_8(x)\)。
 \end{enumerate}
 
+注：
+
+事实上，在 \([0, 1]\) 区间内，边界条件 \(S'(0)\)
+的取值会对结果产生较大影响。
+
+如下面的代码展示了当左边界 \(S'(0)\) 取不同值时，对插值结果在 \([0, 1]\)
+区间内的影响。
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{边界敏感性：} 在插值数据中，区间 {[}0,1{]} 紧邻左端，当 S'(x₀)
+  发生较大变化时，会显著改变该处的曲率；
+\item
+  \textbf{全局耦合效应：}
+  由于样条构造要求在所有节点处保持连续性和二阶连续性，边界条件对整个 m
+  系统具有较强的耦合效应；
+\item
+  \textbf{数据分布不均：} 在本例中，数据点分布在 {[}0,64{]}
+  上，但我们仅观察 {[}0,1{]}
+  内的局部行为，此处受左端条件支配较强，故不同 S'(x₀)
+  值可能造成较大的局部形状差异。
+\end{itemize}
+
+即使仅稍微改变 S'(x₀) 的值，也会引起在 {[}0,1{]}
+区间内插值结果（及其导数）的显著不同，这正是边界条件对三次样条插值结果影响较大的典型例子。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{110}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 给定数据}
+\PY{n}{x\PYZus{}nodes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{,} \PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{36}\PY{p}{,} \PY{l+m+mi}{49}\PY{p}{,} \PY{l+m+mi}{64}\PY{p}{]}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{float}\PY{p}{)}
+\PY{n}{y\PYZus{}nodes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{]}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{float}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} 真值函数：sqrt(x)}
+\PY{n}{f} \PY{o}{=} \PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} 用于样条构造的通用函数}
+\PY{k}{def} \PY{n+nf}{compute\PYZus{}m\PYZus{}clamped}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{S0\PYZus{}prime}\PY{p}{,} \PY{n}{S\PYZus{}last\PYZus{}prime}\PY{p}{)}\PY{p}{:}
+    \PY{n}{h} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{diff}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{)}
+    \PY{n}{d} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{diff}\PY{p}{(}\PY{n}{y\PYZus{}nodes}\PY{p}{)} \PY{o}{/} \PY{n}{h}
+    \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{)}
+    \PY{n}{A} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{n}{b\PYZus{}vec} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 内节点 j=1,..., n\PYZhy{}2}
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{A}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+        \PY{n}{A}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{j}\PY{p}{]}   \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{+} \PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}
+        \PY{n}{A}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{n}{j}\PY{p}{]}
+        \PY{n}{b\PYZus{}vec}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(}\PY{n}{d}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{d}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 边界条件：夹紧条件}
+    \PY{c+c1}{\PYZsh{} 左端点： S\PYZsq{}(x₀)=S0\PYZus{}prime}
+    \PY{n}{A}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{A}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{b\PYZus{}vec}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(}\PY{n}{d}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{S0\PYZus{}prime}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 右端点： S\PYZsq{}(xₙ₋₁)=S\PYZus{}last\PYZus{}prime}
+    \PY{n}{A}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{n}{h}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+    \PY{n}{A}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{h}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+    \PY{n}{b\PYZus{}vec}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(}\PY{n}{S\PYZus{}last\PYZus{}prime} \PY{o}{\PYZhy{}} \PY{n}{d}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{n}{m} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{solve}\PY{p}{(}\PY{n}{A}\PY{p}{,} \PY{n}{b\PYZus{}vec}\PY{p}{)}
+    \PY{k}{return} \PY{n}{m}
+\PY{c+c1}{\PYZsh{} 样条评价函数（标准公式）}
+\PY{k}{def} \PY{n+nf}{eval\PYZus{}spline}\PY{p}{(}\PY{n}{x\PYZus{}val}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{x\PYZus{}val} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{x\PYZus{}nodes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{:}
+        \PY{n}{j} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{elif} \PY{n}{x\PYZus{}val} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{x\PYZus{}nodes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{:}
+        \PY{n}{j} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}
+    \PY{k}{else}\PY{p}{:}
+        \PY{n}{j} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{searchsorted}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{x\PYZus{}val}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}
+    \PY{n}{xj} \PY{o}{=} \PY{n}{x\PYZus{}nodes}\PY{p}{[}\PY{n}{j}\PY{p}{]}
+    \PY{n}{xj1} \PY{o}{=} \PY{n}{x\PYZus{}nodes}\PY{p}{[}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}
+    \PY{n}{hj} \PY{o}{=} \PY{n}{xj1} \PY{o}{\PYZhy{}} \PY{n}{xj}
+    \PY{n}{A\PYZus{}coef} \PY{o}{=} \PY{p}{(}\PY{n}{xj1} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}val}\PY{p}{)} \PY{o}{/} \PY{n}{hj}
+    \PY{n}{B\PYZus{}coef} \PY{o}{=} \PY{p}{(}\PY{n}{x\PYZus{}val} \PY{o}{\PYZhy{}} \PY{n}{xj}\PY{p}{)} \PY{o}{/} \PY{n}{hj}
+    \PY{n}{Sx} \PY{o}{=} \PY{n}{A\PYZus{}coef} \PY{o}{*} \PY{n}{y\PYZus{}nodes}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{B\PYZus{}coef} \PY{o}{*} \PY{n}{y\PYZus{}nodes}\PY{p}{[}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{+} \PY{p}{(}\PY{n}{hj}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(}\PY{p}{(}\PY{n}{A\PYZus{}coef}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3} \PY{o}{\PYZhy{}} \PY{n}{A\PYZus{}coef}\PY{p}{)} \PY{o}{*} \PY{n}{m}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{p}{(}\PY{n}{B\PYZus{}coef}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3} \PY{o}{\PYZhy{}} \PY{n}{B\PYZus{}coef}\PY{p}{)} \PY{o}{*} \PY{n}{m}\PY{p}{[}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{k}{return} \PY{n}{Sx}
+\PY{k}{def} \PY{n+nf}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{x\PYZus{}grid}\PY{p}{)}\PY{p}{:}
+    \PY{n}{S\PYZus{}vals} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{eval\PYZus{}spline}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{)} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{x\PYZus{}grid}\PY{p}{]}\PY{p}{)}
+    \PY{k}{return} \PY{n}{S\PYZus{}vals}
+\PY{c+c1}{\PYZsh{} 探究不同 S\PYZsq{}(x₀) 的取值}
+\PY{c+c1}{\PYZsh{} 固定右端 S\PYZsq{}(xₙ₋₁) 取 1/16}
+\PY{n}{S0\PYZus{}prime\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{,} \PY{l+m+mf}{1.5}\PY{p}{,} \PY{l+m+mf}{2.0}\PY{p}{,} \PY{l+m+mf}{2.5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{]}
+\PY{n}{S\PYZus{}last\PYZus{}prime} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{16}
+\PY{c+c1}{\PYZsh{} 构造评价网格，仅在区间 [0, 1] 上显示结果}
+\PY{n}{x\PYZus{}small} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{400}\PY{p}{)}
+\PY{n}{f\PYZus{}small} \PY{o}{=} \PY{n}{f}\PY{p}{(}\PY{n}{x\PYZus{}small}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+\PY{n}{colors} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{c}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{m}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{S0\PYZus{}prime} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{S0\PYZus{}prime\PYZus{}list}\PY{p}{)}\PY{p}{:}
+    \PY{n}{m} \PY{o}{=} \PY{n}{compute\PYZus{}m\PYZus{}clamped}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{S0\PYZus{}prime}\PY{p}{,} \PY{n}{S\PYZus{}last\PYZus{}prime}\PY{p}{)}
+    \PY{n}{S\PYZus{}small} \PY{o}{=} \PY{n}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{x\PYZus{}small}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 绘制 S(x) 在 [0,1]}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} plt.plot(x\PYZus{}nodes, y\PYZus{}nodes, \PYZsq{}ko\PYZsq{})}
+    \PY{k}{if} \PY{n}{i} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}small}\PY{p}{,} \PY{n}{f\PYZus{}small}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+sa}{r}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{sqrt}\PY{l+s+si}{\PYZob{}x\PYZcb{}}\PY{l+s+s2}{\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}small}\PY{p}{,} \PY{n}{S\PYZus{}small}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{colors}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S(x), S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x₀)=}\PY{l+s+si}{\PYZob{}}\PY{n}{S0\PYZus{}prime}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S(x)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 计算并绘制 S\PYZsq{}(x) 数值（差分近似）}
+    \PY{n}{dx} \PY{o}{=} \PY{l+m+mf}{1e\PYZhy{}5}
+    \PY{n}{S1\PYZus{}small} \PY{o}{=} \PY{p}{(}\PY{n}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{x\PYZus{}small}\PY{o}{+}\PY{n}{dx}\PY{p}{)} \PY{o}{\PYZhy{}} 
+                \PY{n}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{x\PYZus{}small}\PY{o}{\PYZhy{}}\PY{n}{dx}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{dx}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}small}\PY{p}{,} \PY{n}{S1\PYZus{}small}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{colors}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x), S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x₀)=}\PY{l+s+si}{\PYZob{}}\PY{n}{S0\PYZus{}prime}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 数值差分近似计算 S\PYZsq{}\PYZsq{}(x)}
+    \PY{n}{S2\PYZus{}small} \PY{o}{=} \PY{p}{(}\PY{n}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{x\PYZus{}small}\PY{o}{+}\PY{n}{dx}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{x\PYZus{}small}\PY{p}{)} \PY{o}{+} 
+                \PY{n}{evaluate\PYZus{}spline\PYZus{}on\PYZus{}grid}\PY{p}{(}\PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{y\PYZus{}nodes}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{x\PYZus{}small}\PY{o}{\PYZhy{}}\PY{n}{dx}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{dx}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}small}\PY{p}{,} \PY{n}{S2\PYZus{}small}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{colors}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x), S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x₀)=}\PY{l+s+si}{\PYZob{}}\PY{n}{S0\PYZus{}prime}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{S}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{(x)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
 
     % Add a bibliography block to the postdoc
     
