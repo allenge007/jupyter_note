@@ -1,0 +1,1644 @@
+\documentclass[12pt,a4paper,UTF8]{article}
+    \def\allfiles{}
+    \input{preamble.tex}
+    \graphicspath{{./logo/}{./}}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage{xeCJK}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{实验报告}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \input{./titlepage.tex}
+    \tableofcontents
+    
+    
+
+    
+    \section{实验一
+基本信号的产生}\label{ux5b9eux9a8cux4e00-ux57faux672cux4fe1ux53f7ux7684ux4ea7ux751f}
+
+\subsection{任务一}\label{ux4efbux52a1ux4e00}
+
+验证程序实例中的相关程序。
+
+\subsubsection{A}\label{a}
+
+三角波的平移、翻转和尺度变换。
+\begin{comment}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 导入 需要的 library 库  }
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}  \PY{c+c1}{\PYZsh{} 科学计算}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}  \PY{c+c1}{\PYZsh{} 画图}
+
+
+\PY{c+c1}{\PYZsh{} noinspection PyPep8Naming}
+\PY{k}{def} \PY{n+nf}{triangle\PYZus{}wave}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{width}\PY{p}{,} \PY{n}{skew}\PY{p}{)}\PY{p}{:}  \PY{c+c1}{\PYZsh{} 幅度为hc=1，宽度为width,斜度为skew的三角波，skew范围[\PYZhy{}1, 1]，当skew=0，产生对称的三角波信号}
+    \PY{c+c1}{\PYZsh{} 产生幅度为hc，宽度为width，且以0为中心左右各展开width/2大小，斜度为skew的三角波。}
+    \PY{k}{if} \PY{o+ow}{not} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{skew} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{k}{raise} \PY{n+ne}{Exception}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{skew value ERROR!}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}   \PY{c+c1}{\PYZsh{} skew范围不对，抛出异常}
+    \PY{n}{hc} \PY{o}{=} \PY{l+m+mi}{1}  \PY{c+c1}{\PYZsh{} 三角波默认最大幅度，可以通过外部直接乘一个幅度值改变，该点横坐标通过下式计算}
+    \PY{n}{xPoint} \PY{o}{=} \PY{n}{width} \PY{o}{/} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{skew}  \PY{c+c1}{\PYZsh{} 三角波信号拐点横坐标，即上升沿和下降沿的横坐标}
+
+    \PY{k}{if} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{width} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{)} \PY{o+ow}{or} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{width} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{:}  \PY{c+c1}{\PYZsh{} 宽度之外的值为0}
+        \PY{n}{r} \PY{o}{=} \PY{l+m+mf}{0.0}
+    \PY{k}{elif} \PY{n}{x} \PY{o}{\PYZgt{}} \PY{n}{xPoint}\PY{p}{:}  \PY{c+c1}{\PYZsh{} 下降沿的函数}
+        \PY{n}{r} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n}{xPoint}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{width} \PY{o}{/} \PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{n}{xPoint}\PY{p}{)} \PY{o}{+} \PY{n}{hc}
+    \PY{k}{else}\PY{p}{:}  \PY{c+c1}{\PYZsh{} 上升沿的函数}
+        \PY{n}{r} \PY{o}{=} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n}{xPoint}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{width} \PY{o}{/} \PY{l+m+mi}{2} \PY{o}{+} \PY{n}{xPoint}\PY{p}{)} \PY{o}{+} \PY{n}{hc}
+    \PY{k}{return} \PY{n}{r}
+
+
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 定义时间序列}
+\PY{n}{y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{triangle\PYZus{}wave}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{l+m+mf}{4.0}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{)} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}\PY{p}{)}  \PY{c+c1}{\PYZsh{} x(t)信号}
+\PY{n}{y2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{triangle\PYZus{}wave}\PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{t}\PY{p}{,} \PY{l+m+mf}{4.0}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{)} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}\PY{p}{)}  \PY{c+c1}{\PYZsh{} x(2t)信号}
+\PY{n}{y3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{triangle\PYZus{}wave}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{t}\PY{p}{,} \PY{l+m+mf}{4.0}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{)} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{x}\PY{p}{]}\PY{p}{)}  \PY{c+c1}{\PYZsh{} x(1\PYZhy{}2t)信号}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axs} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 通过figsize调整图大小}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplots\PYZus{}adjust}\PY{p}{(}\PY{n}{wspace}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{hspace}\PY{o}{=}\PY{l+m+mf}{0.4}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 通过hspace调整子图间距}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{311}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 绘制x(t)信号的子图}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 显示网格}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x(t)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}  \PY{c+c1}{\PYZsh{} x(t)信号的子图title}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 绘制x(t)信号}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{312}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 绘制x(t)信号的子图}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 显示网格}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x(2t)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}  \PY{c+c1}{\PYZsh{} x(2t)信号的子图title}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y2}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 绘制x(2t)信号}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{313}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 绘制x(1\PYZhy{}2t)信号的子图}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 显示网格}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x(1\PYZhy{}2t)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}  \PY{c+c1}{\PYZsh{} x(1\PYZhy{}2t)信号的子图title}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y3}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 绘制x(1\PYZhy{}2t)信号}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 显示图像}
+\end{Verbatim}
+\end{tcolorbox}
+\end{comment}
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_1_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection{B}\label{b}
+
+离散尺度序列及其尺度变换。
+\begin{comment}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{A} \PY{o}{=} \PY{l+m+mf}{2.0} \PY{c+c1}{\PYZsh{} 信号幅度}
+\PY{n}{a} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5} \PY{c+c1}{\PYZsh{} 指数信号底数}
+\PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)} \PY{c+c1}{\PYZsh{} 离散时间序列}
+\PY{n}{xn} \PY{o}{=} \PY{n}{A} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{power}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{n}{n}\PY{p}{)} \PY{c+c1}{\PYZsh{} 计算x(n)信号}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axs} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} 通过figsize调整图大小}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplots\PYZus{}adjust}\PY{p}{(}\PY{n}{wspace} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{hspace} \PY{o}{=} \PY{l+m+mf}{0.4}\PY{p}{)} \PY{c+c1}{\PYZsh{} 通过hspace调整子图间距}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{211}\PY{p}{)} \PY{c+c1}{\PYZsh{} 绘制x(n)信号的子图}
+\PY{c+c1}{\PYZsh{} plt.stem(n,xn,use\PYZus{}line\PYZus{}collection=True) \PYZsh{} 绘制x(n)信号}
+\PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{xn}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} 显示网格}
+\PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x[n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} x[n]信号title}
+\PY{n}{xn2} \PY{o}{=} \PY{l+m+mf}{2.0} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{power}\PY{p}{(}\PY{n}{a}\PY{p}{,} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{n}\PY{p}{)} \PY{c+c1}{\PYZsh{} 计算x(0.5n)信号}
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{212}\PY{p}{)} \PY{c+c1}{\PYZsh{} 绘制x(0.5n)信号的子图}
+\PY{c+c1}{\PYZsh{} plt.stem(n,xn2,use\PYZus{}line\PYZus{}collection=True) \PYZsh{} 绘制x(0.5n)信号}
+\PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{xn2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} 显示网格}
+\PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x[0.5n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{c+c1}{\PYZsh{} x[0.5n]信号title}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} 显示图像}
+\end{Verbatim}
+\end{tcolorbox}
+    \begin{Verbatim}[commandchars=\\\{\}]
+/var/folders/c8/c991tv453sl7r0wy6k3h9zjr0000gn/T/ipykernel\_2831/2215951593.py:12
+: RuntimeWarning: invalid value encountered in power
+  xn2 = 2.0 * np.power(a, 0.5 * n) \# 计算x(0.5n)信号
+    \end{Verbatim}
+\end{comment}
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_3_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{任务二}\label{ux4efbux52a1ux4e8c}
+
+利用
+
+\[
+x(t) = u(t) - u(t - 2) + u(t - 0.5) - u(t - 1.5), \quad (0\le t \le 3)
+\]
+
+编写相关程序，绘制出 \(x(-2t), x(t/2+1)\) 和 \(5x(t)\) 波形。
+\begin{comment}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 定义单位阶跃函数}
+\PY{k}{def} \PY{n+nf}{u}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{t} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 定义 x(t)}
+\PY{k}{def} \PY{n+nf}{x}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{u}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{u}\PY{p}{(}\PY{n}{t} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}\PY{p}{)} \PY{o}{+} \PY{n}{u}\PY{p}{(}\PY{n}{t} \PY{o}{\PYZhy{}} \PY{l+m+mf}{0.5}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{u}\PY{p}{(}\PY{n}{t} \PY{o}{\PYZhy{}} \PY{l+m+mf}{1.5}\PY{p}{)}
+
+\PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 原始信号}
+\PY{n}{y} \PY{o}{=} \PY{n}{x}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} x(\PYZhy{}2t)}
+\PY{n}{y1} \PY{o}{=} \PY{n}{x}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{t}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} x(t/2 + 1)}
+\PY{n}{y2} \PY{o}{=} \PY{n}{x}\PY{p}{(}\PY{n}{t} \PY{o}{/} \PY{l+m+mi}{2} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} 5x(t)}
+\PY{n}{y3} \PY{o}{=} \PY{l+m+mi}{5} \PY{o}{*} \PY{n}{x}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{y1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}x(\PYZhy{}2t)\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{y2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}x(}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{frac}\PY{l+s+si}{\PYZob{}t\PYZcb{}}\PY{l+s+si}{\PYZob{}2\PYZcb{}}\PY{l+s+s1}{+1)\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{y3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}5x(t)\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+\end{comment}
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_5_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{任务三}\label{ux4efbux52a1ux4e09}
+
+设
+
+\[
+x[n] = \begin{cases}
+-1, & n < -2\\
+n, & -2 \le n \le 1 \\
+\frac{1}{n} & n > 1
+\end{cases}
+\]
+
+编写程序，绘制 \(x[-n], x[2n + 2], x[n / 2], (\quad -20 \le n \le 20)\)
+\begin{comment}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 定义 x[n]}
+\PY{k}{def} \PY{n+nf}{x\PYZus{}n}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+    \PY{n}{result} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros\PYZus{}like}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{float}\PY{p}{)}
+    \PY{n}{result}\PY{p}{[}\PY{n}{n} \PY{o}{\PYZlt{}} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+    \PY{n}{mask1} \PY{o}{=} \PY{p}{(}\PY{n}{n} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{n} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{result}\PY{p}{[}\PY{n}{mask1}\PY{p}{]} \PY{o}{=} \PY{n}{n}\PY{p}{[}\PY{n}{mask1}\PY{p}{]}
+    \PY{n}{mask2} \PY{o}{=} \PY{n}{n} \PY{o}{\PYZgt{}} \PY{l+m+mi}{1}
+    \PY{n}{result}\PY{p}{[}\PY{n}{mask2}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{[}\PY{n}{mask2}\PY{p}{]}
+    \PY{k}{return} \PY{n}{result}
+
+\PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{21}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} x[\PYZhy{}n]}
+\PY{n}{y1} \PY{o}{=} \PY{n}{x\PYZus{}n}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{n}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} x[2n + 2]}
+\PY{n}{y2} \PY{o}{=} \PY{n}{x\PYZus{}n}\PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{n} \PY{o}{+} \PY{l+m+mi}{2}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} x[n / 2]}
+\PY{c+c1}{\PYZsh{} 由于 n/2 可能不是整数，这里用插值法}
+\PY{n}{n\PYZus{}half} \PY{o}{=} \PY{n}{n} \PY{o}{/} \PY{l+m+mi}{2}
+\PY{n}{y3} \PY{o}{=} \PY{n}{x\PYZus{}n}\PY{p}{(}\PY{n}{n\PYZus{}half}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{y1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}x[\PYZhy{}n]\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{y2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}x[2n+2]\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{y3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}x[n/2]\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+\end{comment}
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_7_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \section{实验二
+信号的卷积}\label{ux5b9eux9a8cux4e8c-ux4fe1ux53f7ux7684ux5377ux79ef}
+
+\subsection{任务一}\label{ux4efbux52a1ux4e00}
+
+验证程序实例中的相关程序。
+
+\subsubsection{A}\label{a}
+
+连续时间信号的卷积：
+\begin{comment}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fs} \PY{o}{=} \PY{l+m+mi}{100}
+\PY{n}{t1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{o}{/}\PY{n}{fs} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{200}\PY{p}{,}\PY{l+m+mi}{211}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\PY{n}{x1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1} \PY{k}{if} \PY{n}{t}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{0} \PY{k}{else} \PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{t1}\PY{p}{]}\PY{p}{)}
+\PY{n}{x2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{o}{*}\PY{n}{t}\PY{p}{)} \PY{k}{if} \PY{n}{t}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{0} \PY{k}{else} \PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{t1}\PY{p}{]}\PY{p}{)}
+\PY{n}{y1} \PY{o}{=} \PY{n}{sg}\PY{o}{.}\PY{n}{convolve}\PY{p}{(}\PY{n}{x1}\PY{p}{,} \PY{n}{x2}\PY{p}{)}\PY{o}{/}\PY{n}{fs}
+\PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{y1}\PY{p}{)}
+\PY{n}{tt} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mf}{4.21}\PY{p}{,} \PY{n}{n}\PY{p}{)}
+
+\PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax2} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax3} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{colspan}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+
+\PY{n}{ax1}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t1}\PY{p}{,} \PY{n}{x1}\PY{p}{)}
+\PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x1(t)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax1}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{ax2}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t1}\PY{p}{,} \PY{n}{x2}\PY{p}{)}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x2(t)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{ax3}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{tt}\PY{p}{,} \PY{n}{y1}\PY{p}{)}
+\PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{conv(x1, x2)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax3}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+\end{comment}
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_9_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection{B}\label{b}
+
+离散时间信号卷积：
+\begin{comment}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{n1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 时间序列[0 1 2 3 4 5]}
+\PY{n}{x1} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{]}  \PY{c+c1}{\PYZsh{} 信号x[n]}
+\PY{n}{n2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 时间序列[0 1 2]}
+\PY{n}{x2} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}  \PY{c+c1}{\PYZsh{} 信号h[n]}
+\PY{n}{y} \PY{o}{=} \PY{n}{sg}\PY{o}{.}\PY{n}{convolve}\PY{p}{(}\PY{n}{x1}\PY{p}{,} \PY{n}{x2}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{full}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 卷积}
+\PY{n}{n3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}
+
+\PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax2} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax3} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{colspan}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+
+\PY{n}{ax1}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n1}\PY{p}{,} \PY{n}{x1}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x[n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax1}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{n}{ax2}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n2}\PY{p}{,} \PY{n}{x2}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{h[n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}xticks}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{step}\PY{o}{=}\PY{l+m+mf}{1.0}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{n}{ax3}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n3}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Conv Sum y[n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time index n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax3}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+\end{comment}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{任务二}\label{ux4efbux52a1ux4e8c}
+
+编写程序，绘制下列信号的卷积波形。
+
+\subsubsection{A}\label{a}
+
+已知
+
+\[
+x_1(t) = tu(t), \quad x_2(t) = e^{-t}u(t)
+\]
+
+求 \(x_1(t) * x_2(t)\)，要求：采样频率 \(fs = 1000\)，时间
+\(t \in [-1.1, 2.1]\)
+
+%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+% \prompt{In}{incolor}{49}{\boxspacing}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+% \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+% \PY{k+kn}{import} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{signal} \PY{k}{as} \PY{n+nn}{sg}
+
+% \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} 连续时间卷积 \PYZhy{}\PYZhy{}\PYZhy{}}
+% \PY{n}{fs} \PY{o}{=} \PY{l+m+mi}{1000}
+% \PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{1.1}\PY{p}{,} \PY{l+m+mf}{2.1}\PY{p}{,} \PY{l+m+mi}{1}\PY{o}{/}\PY{n}{fs}\PY{p}{)}
+% \PY{n}{u} \PY{o}{=} \PY{k}{lambda} \PY{n}{t}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{t} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+% \PY{n}{x1} \PY{o}{=} \PY{n}{t} \PY{o}{*} \PY{n}{u}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+% \PY{n}{x2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+% \PY{n}{y} \PY{o}{=} \PY{n}{sg}\PY{o}{.}\PY{n}{convolve}\PY{p}{(}\PY{n}{x1}\PY{p}{,} \PY{n}{x2}\PY{p}{)} \PY{o}{/} \PY{n}{fs}
+% \PY{c+c1}{\PYZsh{} 卷积后时间轴}
+% \PY{n}{t\PYZus{}conv} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n+nb}{len}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{/} \PY{n}{fs} \PY{o}{+} \PY{p}{(}\PY{n}{t}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{t}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{x1}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}x\PYZus{}1(t) = t u(t)\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{x2}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}x\PYZus{}2(t) = e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{\PYZhy{}t\PYZcb{} u(t)\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}conv}\PY{p}{,} \PY{n}{y}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}x\PYZus{}1(t) * x\PYZus{}2(t)\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+% \end{Verbatim}
+% \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection{B}\label{b}
+
+已知
+
+\[
+x[n] = [3, 2, 1, -2, 1, 0, 4, 0, 3; n = 0:8], \quad h[n] = [-1, -2, 3, -4, 3, 2, 1; n = 0 : 6]
+\]
+
+求 \(x[n] * h[n]\)
+
+%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+% \prompt{In}{incolor}{50}{\boxspacing}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{} 离散时间卷积 \PYZhy{}\PYZhy{}\PYZhy{}}
+% \PY{n}{x} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{]}
+% \PY{n}{h} \PY{o}{=} \PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}
+% \PY{n}{y\PYZus{}dis} \PY{o}{=} \PY{n}{sg}\PY{o}{.}\PY{n}{convolve}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{full}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{n\PYZus{}x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+% \PY{n}{n\PYZus{}h} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{h}\PY{p}{)}\PY{p}{)}
+% \PY{n}{n\PYZus{}y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{y\PYZus{}dis}\PY{p}{)}\PY{p}{)}
+
+% \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax2} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax3} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{colspan}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x[n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n\PYZus{}h}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{h[n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n\PYZus{}y}\PY{p}{,} \PY{n}{y\PYZus{}dis}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x[n] * h[n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+% \end{Verbatim}
+% \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_15_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{分析题}\label{ux5206ux6790ux9898}
+
+\subsubsection{A}\label{a}
+
+连续时间与离散时间信号的卷积定义是什么？卷积的作用是什么？
+
+\paragraph{Answer}\label{answer}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  连续时间信号的卷积定义
+
+  连续时间信号 \(x_1(t)\) 和 \(x_2(t)\) 的卷积定义为： \[
+   y(t) = (x_1 * x_2)(t) = \int_{-\infty}^{+\infty} x_1(\tau) x_2(t - \tau) d\tau
+   \]
+\item
+  离散时间信号的卷积定义
+
+  离散时间信号 \(x_1[n]\) 和 \(x_2[n]\) 的卷积定义为： \[
+   y[n] = (x_1 * x_2)[n] = \sum_{k=-\infty}^{+\infty} x_1[k] x_2[n - k]
+   \]
+\item
+  卷积的作用
+
+  \begin{itemize}
+  \tightlist
+  \item
+    卷积描述了一个信号经过线性时不变系统（LTI系统）后的输出，是系统输入与系统冲激响应的``加权叠加''。
+  \item
+    卷积可以用来分析系统的时域响应、滤波、平滑、去噪等。
+  \item
+    在信号处理中，卷积是理解系统特性和信号变化的重要工具。
+  \end{itemize}
+\end{enumerate}
+
+    \subsubsection{B}\label{b}
+
+\texttt{conv}
+函数只输出了卷积的结果，没有输出对应的时间向量，如何使得时间向量和卷积的结果对应起来？
+
+\paragraph{Answer}\label{answer}
+
+可以通过计算卷积结果的时间（或序列）范围，使卷积结果与时间向量一一对应。方法如下：
+
+\begin{itemize}
+\item
+  \textbf{连续时间信号}：\\
+  若 \(t_1\) 和 \(t_2\) 分别为两个信号的时间向量，步长为
+  \(dt\)，则卷积后时间向量为： \[
+  t_{conv} = [t_1[0] + t_2[0],\ t_1[0] + t_2[0] + dt,\ \ldots,\ t_1[-1] + t_2[-1]]
+  \] 或用代码：
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{t\_conv }\OperatorTok{=}\NormalTok{ np.arange(}\DecValTok{0}\NormalTok{, }\BuiltInTok{len}\NormalTok{(y)) }\OperatorTok{*}\NormalTok{ dt }\OperatorTok{+}\NormalTok{ (t1[}\DecValTok{0}\NormalTok{] }\OperatorTok{+}\NormalTok{ t2[}\DecValTok{0}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+  这样 \(y\) 和 \(t_{conv}\) 就一一对应。
+\item
+  \textbf{离散时间信号}：\\
+  若 \(n_1\) 和 \(n_2\) 为两个信号的序列范围，则卷积后序列范围为： \[
+  n_{conv} = [n_1[0] + n_2[0],\ n_1[0] + n_2[0] + 1,\ \ldots,\ n_1[-1] + n_2[-1]]
+  \] 这样可以正确对应每个卷积结果的索引。
+\end{itemize}
+
+    \section{实验三
+周期信号的傅立叶级数}\label{ux5b9eux9a8cux4e09-ux5468ux671fux4fe1ux53f7ux7684ux5085ux7acbux53f6ux7ea7ux6570}
+
+\subsection{任务一}\label{ux4efbux52a1ux4e00}
+
+\subsubsection{A}\label{a}
+
+给定下面的周期三角信号 \(x(t)\) ，用 Python
+分别计算并绘制其复指数形式和三角函数形式的傅立叶系数级数，并用有限项级数
+\(x_N(t), \quad N = 1, \cdots, 10\)，逼近 \(x(t)\)。
+
+\[
+x(t) = x(t + T) = \begin{cases}
+t, & 0 \le t \le \frac{T}{2} \\
+4 - t, & \frac{T}{2} < t \le T
+\end{cases}, \quad T = 4
+\]
+
+%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+% \prompt{In}{incolor}{20}{\boxspacing}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \PY{k+kn}{import} \PY{n+nn}{matplotlib}
+% \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+% \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+% \PY{n}{matplotlib}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.sans\PYZhy{}serif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SimSong}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}  \PY{c+c1}{\PYZsh{} 指定支持中文的字体}
+% \PY{n}{matplotlib}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{axes.unicode\PYZus{}minus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{k+kc}{False}    \PY{c+c1}{\PYZsh{} 正确显示负号}
+% \PY{c+c1}{\PYZsh{} 信号参数}
+% \PY{n}{T} \PY{o}{=} \PY{l+m+mf}{4.0}                     \PY{c+c1}{\PYZsh{} 周期}
+% \PY{n}{omega0} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi} \PY{o}{/} \PY{n}{T}      \PY{c+c1}{\PYZsh{} 基频}
+% \PY{n}{N\PYZus{}coef} \PY{o}{=} \PY{l+m+mi}{10}                 \PY{c+c1}{\PYZsh{} 计算系数范围：k=\PYZhy{}10,...,10}
+% \PY{n}{t\PYZus{}period} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 一个周期上的采样点}
+
+% \PY{c+c1}{\PYZsh{} 定义周期三角信号 x(t):}
+% \PY{c+c1}{\PYZsh{} 当 0\PYZlt{}=t\PYZlt{}=T/2 时，x(t)=t；当 T/2\PYZlt{}t\PYZlt{}=T 时，x(t)=4\PYZhy{}t}
+% \PY{k}{def} \PY{n+nf}{x\PYZus{}signal}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{t\PYZus{}mod} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mod}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{T}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 对 t 取模得到周期内坐标}
+%     \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{t\PYZus{}mod} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{t\PYZus{}mod}\PY{p}{,} \PY{l+m+mi}{4} \PY{o}{\PYZhy{}} \PY{n}{t\PYZus{}mod}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 计算复指数傅立叶系数 a\PYZus{}k（在一个周期内积分）}
+% \PY{n}{a\PYZus{}k} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+% \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{N\PYZus{}coef}\PY{p}{,} \PY{n}{N\PYZus{}coef}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{integrand} \PY{o}{=} \PY{n}{x\PYZus{}signal}\PY{p}{(}\PY{n}{t\PYZus{}period}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{k} \PY{o}{*} \PY{n}{omega0} \PY{o}{*} \PY{n}{t\PYZus{}period}\PY{p}{)}
+%     \PY{n}{a} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{trapz}\PY{p}{(}\PY{n}{integrand}\PY{p}{,} \PY{n}{t\PYZus{}period}\PY{p}{)}
+%     \PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]} \PY{o}{=} \PY{n}{a}
+
+% \PY{c+c1}{\PYZsh{} 将系数转换为数组便于绘图（按 k 从 \PYZhy{}N\PYZus{}coef 到 N\PYZus{}coef排序）}
+% \PY{n}{k\PYZus{}vals} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{N\PYZus{}coef}\PY{p}{,} \PY{n}{N\PYZus{}coef}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{a\PYZus{}vals} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n}{k\PYZus{}vals}\PY{p}{]}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 绘制复指数傅立叶系数（实部、虚部及幅值、相位）}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{k\PYZus{}vals}\PY{p}{,} \PY{n}{a\PYZus{}vals}\PY{o}{.}\PY{n}{real}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{k\PYZus{}vals}\PY{p}{,} \PY{n}{a\PYZus{}vals}\PY{o}{.}\PY{n}{imag}\PY{p}{,} \PY{n}{linefmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{markerfmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ro}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Coefficient}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{复指数傅立叶系数（实部：蓝，虚部：红）}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{k\PYZus{}vals}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{a\PYZus{}vals}\PY{p}{)}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Magnitude}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{傅立叶系数幅值}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+% \PY{n}{k\PYZus{}range} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{N\PYZus{}coef}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{cos\PYZus{}amp} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{o}{.}\PY{n}{real} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n}{k\PYZus{}range}\PY{p}{]}    \PY{c+c1}{\PYZsh{} 余弦项系数：2Re(aₖ)}
+% \PY{n}{sin\PYZus{}amp} \PY{o}{=} \PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{o}{.}\PY{n}{imag} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n}{k\PYZus{}range}\PY{p}{]}   \PY{c+c1}{\PYZsh{} 正弦项系数：\PYZhy{}2Im(aₖ)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{k\PYZus{}range}\PY{p}{,} \PY{n}{cos\PYZus{}amp}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{余弦项幅值}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{余弦项 (\PYZdl{}2}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Re(a\PYZus{}k)\PYZdl{})}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{k\PYZus{}range}\PY{p}{,} \PY{n}{sin\PYZus{}amp}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{正弦项幅值}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{正弦项 (\PYZdl{}\PYZhy{}2}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{Im(aₖ)\PYZdl{})}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 构造时间轴用于重构和比较波形}
+% \PY{n}{t\PYZus{}full} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{T}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{T}\PY{p}{,} \PY{l+m+mi}{2000}\PY{p}{)}
+% \PY{n}{x\PYZus{}true} \PY{o}{=} \PY{n}{x\PYZus{}signal}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 使用复指数形式重构有限项傅立叶级数：}
+% \PY{c+c1}{\PYZsh{} x\PYZus{}N(t) = sum\PYZus{}\PYZob{}k=\PYZhy{}N\PYZcb{}\PYZca{}\PYZob{}N\PYZcb{} a\PYZus{}k * exp(j*k*omega0*t)}
+% \PY{k}{def} \PY{n+nf}{reconstruct\PYZus{}complex}\PY{p}{(}\PY{n}{N}\PY{p}{,} \PY{n}{t}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{x\PYZus{}rec} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros\PYZus{}like}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{complex}\PY{p}{)}
+%     \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{N}\PY{p}{,} \PY{n}{N}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+%         \PY{n}{x\PYZus{}rec} \PY{o}{+}\PY{o}{=} \PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{k} \PY{o}{*} \PY{n}{omega0} \PY{o}{*} \PY{n}{t}\PY{p}{)}
+%     \PY{k}{return} \PY{n}{x\PYZus{}rec}\PY{o}{.}\PY{n}{real}  \PY{c+c1}{\PYZsh{} 原信号为实值}
+
+% \PY{c+c1}{\PYZsh{} 使用三角函数形式重构：}
+% \PY{c+c1}{\PYZsh{} 利用 a\PYZus{}0 和对于 k\PYZgt{}=1, A\PYZus{}k=2|a\PYZus{}k| ，phi\PYZus{}k = angle(a\PYZus{}k)}
+% \PY{k}{def} \PY{n+nf}{reconstruct\PYZus{}trig}\PY{p}{(}\PY{n}{N}\PY{p}{,} \PY{n}{t}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{a0} \PY{o}{=} \PY{n}{a\PYZus{}k}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{real}
+%     \PY{n}{x\PYZus{}rec} \PY{o}{=} \PY{n}{a0} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{ones\PYZus{}like}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+%     \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{N}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+%         \PY{n}{A\PYZus{}k} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{)}
+%         \PY{n}{phi\PYZus{}k} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{angle}\PY{p}{(}\PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{)}
+%         \PY{n}{x\PYZus{}rec} \PY{o}{+}\PY{o}{=} \PY{n}{A\PYZus{}k} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{omega0} \PY{o}{*} \PY{n}{t} \PY{o}{\PYZhy{}} \PY{n}{phi\PYZus{}k}\PY{p}{)}
+%     \PY{k}{return} \PY{n}{x\PYZus{}rec}
+
+% \PY{c+c1}{\PYZsh{} 绘制有限项逼近：对 N=1,...,10 分别绘制复指数形式与三角函数形式的逼近结果}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+% \PY{k}{for} \PY{n}{N} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{11}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{x\PYZus{}rec\PYZus{}complex} \PY{o}{=} \PY{n}{reconstruct\PYZus{}complex}\PY{p}{(}\PY{n}{N}\PY{p}{,} \PY{n}{t\PYZus{}full}\PY{p}{)}
+%     \PY{n}{x\PYZus{}rec\PYZus{}trig} \PY{o}{=} \PY{n}{reconstruct\PYZus{}trig}\PY{p}{(}\PY{n}{N}\PY{p}{,} \PY{n}{t\PYZus{}full}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{N}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{,} \PY{n}{x\PYZus{}true}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{真实信号}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{,} \PY{n}{x\PYZus{}rec\PYZus{}complex}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{复指数}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{,} \PY{n}{x\PYZus{}rec\PYZus{}trig}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{三角函数}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{N = }\PY{l+s+si}{\PYZob{}}\PY{n}{N}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{T}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{T}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{4.5}\PY{p}{)}
+%     \PY{k}{if} \PY{n}{N} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+%         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+% \end{Verbatim}
+% \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection{B}\label{b}
+
+对周期方波和上面的周期三角波，分别绘图演示其有限项级数 \(x_N(t)\) 当项数
+\(N=10,100,1000\) 时对 \(x(t)\)
+的逼近效果。对比分析两者逼近过程中是否出现吉布斯（Gibbs）现象并解释原因。
+
+%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+% \prompt{In}{incolor}{30}{\boxspacing}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+% \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+
+% \PY{c+c1}{\PYZsh{} 信号周期和基本频率}
+% \PY{n}{T} \PY{o}{=} \PY{l+m+mf}{4.0}     
+% \PY{n}{omega0} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi} \PY{o}{/} \PY{n}{T}
+
+% \PY{c+c1}{\PYZsh{} 定义周期三角波：当 0\PYZlt{}=t\PYZlt{}=T/2 时，x(t)=t；当 T/2\PYZlt{}t\PYZlt{}=T 时，x(t)=4\PYZhy{}t}
+% \PY{k}{def} \PY{n+nf}{x\PYZus{}triangle}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{t\PYZus{}mod} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mod}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{T}\PY{p}{)}
+%     \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{t\PYZus{}mod} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{t\PYZus{}mod}\PY{p}{,} \PY{l+m+mi}{4} \PY{o}{\PYZhy{}} \PY{n}{t\PYZus{}mod}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 定义周期方波：当 0\PYZlt{}=t\PYZlt{}T/2 时取 1，T/2\PYZlt{}=t\PYZlt{}T 时取 \PYZhy{}1}
+% \PY{k}{def} \PY{n+nf}{x\PYZus{}square}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{t\PYZus{}mod} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mod}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{T}\PY{p}{)}
+%     \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{t\PYZus{}mod} \PY{o}{\PYZlt{}} \PY{n}{T}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{1.0}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 采样点用于数值积分（在一个周期内）}
+% \PY{n}{t\PYZus{}period} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{l+m+mi}{10000}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 计算傅立叶系数}
+% \PY{k}{def} \PY{n+nf}{compute\PYZus{}fourier\PYZus{}coeffs}\PY{p}{(}\PY{n}{x\PYZus{}func}\PY{p}{,} \PY{n}{N\PYZus{}coef}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{a\PYZus{}k} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+%     \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{N\PYZus{}coef}\PY{p}{,} \PY{n}{N\PYZus{}coef}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+%         \PY{n}{integrand} \PY{o}{=} \PY{n}{x\PYZus{}func}\PY{p}{(}\PY{n}{t\PYZus{}period}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{k} \PY{o}{*} \PY{n}{omega0} \PY{o}{*} \PY{n}{t\PYZus{}period}\PY{p}{)}
+%         \PY{n}{a} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{n}{T}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{trapz}\PY{p}{(}\PY{n}{integrand}\PY{p}{,} \PY{n}{t\PYZus{}period}\PY{p}{)}
+%         \PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]} \PY{o}{=} \PY{n}{a}
+%     \PY{k}{return} \PY{n}{a\PYZus{}k}
+
+% \PY{c+c1}{\PYZsh{} 利用复指数形式重构信号}
+% \PY{k}{def} \PY{n+nf}{reconstruct\PYZus{}signal}\PY{p}{(}\PY{n}{a\PYZus{}k}\PY{p}{,} \PY{n}{N}\PY{p}{,} \PY{n}{t}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{x\PYZus{}rec} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros\PYZus{}like}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{complex}\PY{p}{)}
+%     \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{N}\PY{p}{,} \PY{n}{N}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+%         \PY{n}{x\PYZus{}rec} \PY{o}{+}\PY{o}{=} \PY{n}{a\PYZus{}k}\PY{p}{[}\PY{n}{k}\PY{p}{]} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{k} \PY{o}{*} \PY{n}{omega0} \PY{o}{*} \PY{n}{t}\PY{p}{)}
+%     \PY{k}{return} \PY{n}{x\PYZus{}rec}\PY{o}{.}\PY{n}{real}  \PY{c+c1}{\PYZsh{} 原信号均为实值}
+
+% \PY{c+c1}{\PYZsh{} 为了得到较高精度的傅立叶系数，这里计算较宽的系数范围}
+% \PY{n}{N\PYZus{}coef\PYZus{}all} \PY{o}{=} \PY{l+m+mi}{1000}  
+% \PY{n}{a\PYZus{}k\PYZus{}triangle} \PY{o}{=} \PY{n}{compute\PYZus{}fourier\PYZus{}coeffs}\PY{p}{(}\PY{n}{x\PYZus{}triangle}\PY{p}{,} \PY{n}{N\PYZus{}coef\PYZus{}all}\PY{p}{)}
+% \PY{n}{a\PYZus{}k\PYZus{}square} \PY{o}{=} \PY{n}{compute\PYZus{}fourier\PYZus{}coeffs}\PY{p}{(}\PY{n}{x\PYZus{}square}\PY{p}{,} \PY{n}{N\PYZus{}coef\PYZus{}all}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 构造时间轴用于重构（显示多个周期以便观察边缘）}
+% \PY{n}{t\PYZus{}full} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{T}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{T}\PY{p}{,} \PY{l+m+mi}{2000}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 不同截断数}
+% \PY{n}{Ns} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{]}
+
+% \PY{c+c1}{\PYZsh{} 绘制周期三角波的有限项逼近}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+% \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{N} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{Ns}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{x\PYZus{}rec} \PY{o}{=} \PY{n}{reconstruct\PYZus{}signal}\PY{p}{(}\PY{n}{a\PYZus{}k\PYZus{}triangle}\PY{p}{,} \PY{n}{N}\PY{p}{,} \PY{n}{t\PYZus{}full}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Ns}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{,} \PY{n}{x\PYZus{}triangle}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{真实信号}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{,} \PY{n}{x\PYZus{}rec}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{逼近 N=}\PY{l+s+si}{\PYZob{}}\PY{n}{N}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{周期三角波 Fourier 级数逼近 (N=}\PY{l+s+si}{\PYZob{}}\PY{n}{N}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{T}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{T}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{4.5}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+%     \PY{k}{if} \PY{n}{i} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+%         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 绘制周期方波的有限项逼近}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+% \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{N} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{Ns}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{x\PYZus{}rec} \PY{o}{=} \PY{n}{reconstruct\PYZus{}signal}\PY{p}{(}\PY{n}{a\PYZus{}k\PYZus{}square}\PY{p}{,} \PY{n}{N}\PY{p}{,} \PY{n}{t\PYZus{}full}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Ns}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{,} \PY{n}{x\PYZus{}square}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{真实信号}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}full}\PY{p}{,} \PY{n}{x\PYZus{}rec}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lw}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{逼近 N=}\PY{l+s+si}{\PYZob{}}\PY{n}{N}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{周期方波 Fourier 级数逼近 (N=}\PY{l+s+si}{\PYZob{}}\PY{n}{N}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{xlim}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{T}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{T}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{l+m+mf}{1.5}\PY{p}{)}
+%     \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+%     \PY{k}{if} \PY{n}{i} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+%         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 分析说明}
+% \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{观察结果：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{1. 对于周期方波，因信号存在跳变，不连续点附近会出现明显的振铃现象，即吉布斯现象，该现象不会随截断项数无限增加而消失。}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{2. 而周期三角波信号本身连续，虽然在导数处有不连续，其傅立叶逼近不会出现明显的振铃，逼近效果较好。}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \end{Verbatim}
+% \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_21_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_21_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+观察结果：
+1. 对于周期方波，因信号存在跳变，不连续点附近会出现明显的振铃现象，即吉布斯现象，该现象不会随截断项数无限增加而消失。
+2. 而周期三角波信号本身连续，虽然在导数处有不连续，其傅立叶逼近不会出现明显的振铃，逼近效果较好。
+    \end{Verbatim}
+
+    \subsubsection{C}\label{c}
+
+已知微分方程
+
+\[
+\frac{dy}{dt} + 2y(t) = x(t)
+\]
+
+满足初始松弛条件。计算该方程所对应系统的频率响应。将 A
+中的周期三角波输入该系统，用 Python 求解并绘制其输出响应。
+
+\paragraph{Solution}\label{solution}
+
+连续时间线性时不变系统输入输出满足如下微分方程形式，
+
+\[
+\sum_{k = 0}^Na_k\frac{d^ky(t)}{dt^k} = \sum_{k = 0}^Mb_k\frac{d^kx(t)}{dt^k}
+\]
+
+故得到
+
+\[
+a_0 = 2, \quad a_1 = 1, \quad b_0 = 1
+\]
+
+故
+
+\[
+H(j\omega) = \frac{1}{2+j\omega}
+\]
+
+%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+% \prompt{In}{incolor}{32}{\boxspacing}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+% \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+% \PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k+kn}{import} \PY{n}{signal}
+
+% \PY{c+c1}{\PYZsh{} 定义系统传递函数 H(s)=1/(s+2)}
+% \PY{n}{num} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}       \PY{c+c1}{\PYZsh{} 分子}
+% \PY{n}{den} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]}    \PY{c+c1}{\PYZsh{} 分母 s+2}
+% \PY{n}{system} \PY{o}{=} \PY{n}{signal}\PY{o}{.}\PY{n}{lti}\PY{p}{(}\PY{n}{num}\PY{p}{,} \PY{n}{den}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 定义时间轴（例如观察两个周期）}
+% \PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{8000}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 定义周期三角波输入 x(t)}
+% \PY{n}{T} \PY{o}{=} \PY{l+m+mf}{4.0}
+% \PY{k}{def} \PY{n+nf}{x\PYZus{}signal}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{t\PYZus{}mod} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mod}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{T}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 将 t 映射到 [0, T) 内}
+%     \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{t\PYZus{}mod} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{t\PYZus{}mod}\PY{p}{,} \PY{l+m+mi}{4} \PY{o}{\PYZhy{}} \PY{n}{t\PYZus{}mod}\PY{p}{)}
+
+% \PY{n}{x} \PY{o}{=} \PY{n}{x\PYZus{}signal}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 利用 lsim 求解系统响应（初始条件默认为 0）}
+% \PY{n}{t\PYZus{}out}\PY{p}{,} \PY{n}{y\PYZus{}out}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{signal}\PY{o}{.}\PY{n}{lsim}\PY{p}{(}\PY{n}{system}\PY{p}{,} \PY{n}{U}\PY{o}{=}\PY{n}{x}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{n}{t}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 绘制输入与输出}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{输入 x(t)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}out}\PY{p}{,} \PY{n}{y\PYZus{}out}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{输出 y(t)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{系统响应：H(jω)=1/(2+jω)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{时间 t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{响应 y(t)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+% \end{Verbatim}
+% \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{思考题}\label{ux601dux8003ux9898}
+
+用以下复指数形式推导三角函数形式的傅立叶级数。
+
+\[
+\begin{cases}
+x(t) = \sum\limits_{k = -\infty}^\infty a_ke^{jk\omega_0 t} \\
+a_k = \frac{1}{T} \int_T x(t)e^{-j\omega_0t} dt
+\end{cases}
+\]
+
+三角函数形式
+
+\[
+\begin{cases}
+x(t) = \frac{c_0}{2} + \sum_{k = 1}^\infty c_k\cos(k\omega_0t) + \sum_{k = 1}^\infty d_k\sin (k\omega_0t) \\
+c_0 = \frac{2}{T}\int_T x(t) dt \\
+c_k = \frac{2}{T}x(t)\cos (k\omega_0t) dt \\
+d_k = \frac{2}{T}x(t)\sin (k\omega_0t) dt
+\end{cases}
+\]
+
+    \subsubsection{Solution}\label{solution}
+
+\[
+  x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \omega_0 t},\quad
+  a_k = \frac{1}{T} \int_{T} x(t) \, e^{-j k \omega_0 t}\, dt.
+\]
+
+\[
+  a_{-k} = a_k^*.
+\]\\
+将 \(k=0\) 项单独拿出，其余正负 \(k\) 项成对出现，可以写为\\
+\[
+  x(t) = a_0 + \sum_{k=1}^{\infty} \Bigl[ a_k e^{j k \omega_0 t} + a_k^* e^{-j k \omega_0 t} \Bigr].
+\] \[
+  a_k e^{j k \omega_0 t} + a_k^* e^{-j k \omega_0 t} = 2\,\Re\{a_k e^{j k \omega_0 t}\},
+\]\\
+可写为\\
+\[
+  x(t) = a_0 + 2 \sum_{k=1}^{\infty} \Re\{a_k e^{j k \omega_0 t}\}.
+\]\\
+令 \(a_k=|a_k|e^{j\varphi_k}\)，则\\
+\[
+  \Re\{a_k e^{j k \omega_0 t}\} = |a_k|\cos(k\omega_0t+\varphi_k).
+\] \[
+  x(t) = a_0 + 2 \sum_{k=1}^{\infty} |a_k|\cos(k\omega_0t+\varphi_k).
+\]\\
+利用余弦加法公式\\
+\[
+  \cos(k\omega_0t+\varphi_k)=\cos\varphi_k\cos(k\omega_0t) - \sin\varphi_k\sin(k\omega_0t),
+\]\\
+令\\
+\[
+  c_0 = 2a_0,\quad c_k = 2|a_k|\cos\varphi_k,\quad d_k = -2|a_k|\sin\varphi_k,\quad (k\ge1),
+\]\\
+得\\
+\[
+  x(t) = \frac{c_0}{2} + \sum_{k=1}^{\infty} \Bigl[ c_k\cos(k\omega_0t) + d_k\sin(k\omega_0t)\Bigr].
+\]
+
+这样就得到了三角函数形式的傅立叶级数。
+
+    \section{实验四
+离散时间非周期信号的傅立叶变换}\label{ux5b9eux9a8cux56db-ux79bbux6563ux65f6ux95f4ux975eux5468ux671fux4fe1ux53f7ux7684ux5085ux7acbux53f6ux53d8ux6362}
+
+\subsection{任务一}\label{ux4efbux52a1ux4e00}
+
+编程计算双边指数衰减信号 \(x[n] = e^{-2|n|}\)
+的离散时间傅立叶变换，并验证其时域内插值，即
+
+\[
+x_k[n] = \begin{cases}
+x[n / k], & k | n \\
+0,  & {\rm otherwise}
+\end{cases}
+\]
+
+的离散傅立叶变换，取 \(k = 3\)。请分别绘制 \(x[n]\) 和 \(x_k[n]\)
+的幅频曲线和相频曲线。
+
+%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+% \prompt{In}{incolor}{33}{\boxspacing}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+% \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+
+% \PY{c+c1}{\PYZsh{} 为了近似无限长序列，设取 n 从 \PYZhy{}50 到 50}
+% \PY{n}{N} \PY{o}{=} \PY{l+m+mi}{50}
+% \PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{N}\PY{p}{,} \PY{n}{N}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 定义双边指数衰减信号 x[n] = e\PYZca{}\PYZob{}\PYZhy{}2|n|\PYZcb{}}
+% \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 定义频率网格（单位：rad/sample），覆盖 \PYZhy{}π 到 π}
+% \PY{n}{w} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{l+m+mi}{1024}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 计算 DTFT: X(w) = \PYZbs{}sum\PYZus{}\PYZob{}n=\PYZhy{}N\PYZcb{}\PYZca{}N x[n] e\PYZca{}\PYZob{}\PYZhy{}jωn\PYZcb{}}
+% \PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{k+kc}{None}\PY{p}{]} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{outer}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{w}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 定义插值后的序列 x\PYZus{}k[n]}
+% \PY{c+c1}{\PYZsh{} 当 n 能被 3 整除时，令 m = n/3，x\PYZus{}k[n] = x[m] = e\PYZca{}\PYZob{}\PYZhy{}2|m|\PYZcb{}；否则为 0}
+% \PY{n}{xk} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZpc{}} \PY{l+m+mi}{3} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{n} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+% \PY{n}{Xk} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{xk}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{k+kc}{None}\PY{p}{]} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{outer}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{w}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 绘制 x[n] 的 DTFT 幅频和相频曲线}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{w}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZdl{} (rad/sample)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Magnitude}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Magnitude of \PYZdl{}X(e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{j}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZcb{})\PYZdl{} for \PYZdl{}x[n]=e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{\PYZhy{}2|n|\PYZcb{}\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{w}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{angle}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZdl{} (rad/sample)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Phase (rad)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Phase of \PYZdl{}X(e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{j}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZcb{})\PYZdl{} for \PYZdl{}x[n]=e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{\PYZhy{}2|n|\PYZcb{}\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 绘制 x\PYZus{}k[n] 的 DTFT 幅频和相频曲线}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{w}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{Xk}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZdl{} (rad/sample)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Magnitude}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Magnitude of \PYZdl{}X\PYZus{}k(e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{j}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZcb{})\PYZdl{} for interpolated \PYZdl{}x\PYZus{}k[n]\PYZdl{} (\PYZdl{}k=3\PYZdl{})}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{w}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{angle}\PY{p}{(}\PY{n}{Xk}\PY{p}{)}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZdl{} (rad/sample)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Phase (rad)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Phase of \PYZdl{}X\PYZus{}k(e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{j}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZcb{})\PYZdl{} for interpolated \PYZdl{}x\PYZus{}k[n]\PYZdl{} (\PYZdl{}k=3\PYZdl{})}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+% \end{Verbatim}
+% \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_27_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_27_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{任务二}\label{ux4efbux52a1ux4e8c}
+
+考虑差分方程
+
+\[
+y[n] - ay[n-1] = x[n]
+\]
+
+其中，\(|a| < 1\)。取 \(a = 0.2\)，编程求解该方程的频率响应，并
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  画出系统的幅频和相频特性曲线；
+\item
+  求解系统的单位冲激响应并绘制出图形
+\end{enumerate}
+
+\subsubsection{Solution}\label{solution}
+
+\[
+H(e^{j\omega}) = \frac{Y(e^{j\omega})}{X(e^{j\omega})} = \frac{\sum_{k = 0}^Mb_ke^{-jk\omega}}{\sum_{k = 0}^Na_ke^{-jk\omega}} = \frac{1}{1 - 0.2e^{-j\omega}}
+\]
+
+%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+% \prompt{In}{incolor}{49}{\boxspacing}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+% \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+
+% \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+% \PY{c+c1}{\PYZsh{} (a) 求系统的频率响应 H(e\PYZca{}(jω)) 的幅频和相频特性}
+% \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+% \PY{n}{a} \PY{o}{=} \PY{l+m+mf}{0.2}  \PY{c+c1}{\PYZsh{} 取 a = 0.2}
+
+% \PY{c+c1}{\PYZsh{} 定义频率采样区间：从 \PYZhy{}π 到 π（rad/sample）}
+% \PY{n}{omega} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{l+m+mi}{1024}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 计算频率响应：H(e\PYZca{}(jω)) = 1 / (1 \PYZhy{} a e\PYZca{}(\PYZhy{}jω))}
+% \PY{n}{H} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{a} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{omega}\PY{p}{)}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 分别取幅值和相位}
+% \PY{n}{H\PYZus{}magnitude} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{H}\PY{p}{)}
+% \PY{n}{H\PYZus{}phase} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{angle}\PY{p}{(}\PY{n}{H}\PY{p}{)}
+
+% \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax2} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax3} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{colspan}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{omega}\PY{p}{,} \PY{n}{H\PYZus{}magnitude}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{系统幅频特性}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{频率 ω (rad/sample)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}|H(e\PYZca{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{jω)\PYZcb{}|\PYZdl{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{omega}\PY{p}{,} \PY{n}{H\PYZus{}phase}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{系统相频特性}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{频率 ω (rad/sample)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Phase(\PYZdl{}H(e\PYZca{}}\PY{l+s+si}{\PYZob{}jω\PYZcb{}}\PY{l+s+s2}{)\PYZdl{}) (radians)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+% \PY{c+c1}{\PYZsh{} (b) 求系统的单位冲激响应 h[n]}
+% \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+% \PY{c+c1}{\PYZsh{} 根据理论，h[n] = a\PYZca{}n * u[n]，这里 u[n] 为单位阶跃（n\PYZgt{}=0）}
+% \PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{50}\PY{p}{)}   \PY{c+c1}{\PYZsh{} 取 n 从 0 到 49}
+% \PY{n}{h} \PY{o}{=} \PY{n}{a} \PY{o}{*}\PY{o}{*} \PY{n}{n}             \PY{c+c1}{\PYZsh{} 对于 n\PYZlt{}0 h[n]=0}
+
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{系统单位冲激响应 h[n]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{h[n]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+% \end{Verbatim}
+% \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_29_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{任务三}\label{ux4efbux52a1ux4e09}
+
+设离散时间双边指数衰减信号 \(x[n] = e^{-2|n|}, y[n] = x[n] * x[n]\)，请
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  编程用卷积性质求解 \(Y(j\omega)\) 与 \(y[n]\)，并绘制
+  \(x[n], |Y(e^{j\omega})|\) 和 \(y[n]\) 的图像
+\item
+  编程用时域卷积求解 \(y[n]\)，绘制 \(y[n]\) 的图像，并与 (a) 的结果比较
+\end{enumerate}
+
+%     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+% \prompt{In}{incolor}{72}{\boxspacing}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+% \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+
+% \PY{c+c1}{\PYZsh{} 设置序列范围及定义 x[n]}
+% \PY{n}{N} \PY{o}{=} \PY{l+m+mi}{5}
+% \PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{N}\PY{p}{,} \PY{n}{N}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}         \PY{c+c1}{\PYZsh{} n从 \PYZhy{}5 到 5，共 11 点}
+% \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{)}      \PY{c+c1}{\PYZsh{} x[n] = e\PYZca{}(\PYZhy{}2|n|)}
+
+% \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{colspan}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{ax2} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax3} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot2grid}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 绘制 x[n]}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x[n]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax1}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 选择均匀的频率网格：ω ∈ [\PYZhy{}π, π)}
+% \PY{n}{num\PYZus{}w} \PY{o}{=} \PY{l+m+mi}{2048}
+% \PY{n}{w} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{n}{num\PYZus{}w}\PY{p}{,} \PY{n}{endpoint}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+% \PY{n}{dw} \PY{o}{=} \PY{n}{w}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{w}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+
+% \PY{c+c1}{\PYZsh{} 计算 DTFT： X(e\PYZca{}(jω)) = Σₙ x[n] e\PYZca{}(\PYZhy{}jωn)}
+% \PY{c+c1}{\PYZsh{} 利用矩阵乘法：令 x 为 (101,1) 的列向量，计算 exp(\PYZhy{}j n ω) 得 (101, num\PYZus{}w) 数组，然后对 n 求和}
+% \PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{k+kc}{None}\PY{p}{]} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{n}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{k+kc}{None}\PY{p}{]} \PY{o}{*} \PY{n}{w}\PY{p}{[}\PY{k+kc}{None}\PY{p}{,} \PY{p}{:}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{w}\PY{p}{,} \PY{n}{X}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}X(e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{j}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZcb{})\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ω (rad/sample)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax2}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+
+% \PY{c+c1}{\PYZsh{} 根据卷积特性，y[n] 的 DTFT = Y(e\PYZca{}(jω)) = X(e\PYZca{}(jω))\PYZca{}2}
+% \PY{n}{Y} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+
+% \PY{c+c1}{\PYZsh{} 计算逆 DTFT，求得 y[n] 的近似值}
+% \PY{c+c1}{\PYZsh{} 选取 n 范围为：从 \PYZhy{}2N 到 2N（即 \PYZhy{}100 到 100，共 201 点）}
+% \PY{n}{n\PYZus{}conv} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{N}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{N}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{y\PYZus{}freq} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{n\PYZus{}conv}\PY{p}{)}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{complex}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 离散化逆 DTFT公式： y[n] = (1/(2π)) Σ\PYZus{}\PYZob{}ω\PYZus{}i\PYZcb{} Y(e\PYZca{}(jω\PYZus{}i)) exp(jω\PYZus{}i n) dw}
+% \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{ni} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{n\PYZus{}conv}\PY{p}{)}\PY{p}{:}
+%     \PY{n}{y\PYZus{}freq}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{Y} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{l+m+mi}{1}\PY{n}{j} \PY{o}{*} \PY{n}{w} \PY{o}{*} \PY{n}{ni}\PY{p}{)}\PY{p}{)} \PY{o}{*} \PY{n}{dw}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)}
+% \PY{n}{y\PYZus{}freq} \PY{o}{=} \PY{n}{y\PYZus{}freq}\PY{o}{.}\PY{n}{real}   \PY{c+c1}{\PYZsh{} 理论上 y[n] 为实数}
+
+% \PY{c+c1}{\PYZsh{} 绘制 |Y(e\PYZca{}(jω))|}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{w}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{Y}\PY{p}{)}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}|Y(e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{j}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{omega\PYZcb{})|\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ω (rad/sample)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{ax3}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 利用 np.convolve 进行卷积，mode=\PYZsq{}full\PYZsq{} 得到长度 201 的序列}
+% \PY{n}{y\PYZus{}time} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{convolve}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{mode}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{full}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{n\PYZus{}time} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{N}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{N}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}  \PY{c+c1}{\PYZsh{} 索引范围为 \PYZhy{}100 到 100}
+
+% \PY{c+c1}{\PYZsh{} 绘制直接时域卷积的结果，与频域逆变换结果并排显示}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 左侧子图：频域逆变换得到的 y[n]}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n\PYZus{}conv}\PY{p}{,} \PY{n}{y\PYZus{}freq}\PY{p}{,} \PY{n}{markerfmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{频域逆变换}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{频域方法}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+
+% \PY{c+c1}{\PYZsh{} 右侧子图：时域直接卷积得到的 y[n]}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{stem}\PY{p}{(}\PY{n}{n\PYZus{}time}\PY{p}{,} \PY{n}{y\PYZus{}time}\PY{p}{,} \PY{n}{linefmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{markerfmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ro}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{basefmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{时域卷积}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{时域卷积}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+
+% \PY{n}{plt}\PY{o}{.}\PY{n}{suptitle}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y[n] 比较：频域方法 vs. 时域卷积}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{14}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{n}{rect}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mf}{0.95}\PY{p}{]}\PY{p}{)}
+% \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+% \end{Verbatim}
+% \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_31_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_31_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \section{实验结果意义}\label{ux5b9eux9a8cux7ed3ux679cux610fux4e49}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{基本信号的变换（实验一）}
+
+  \begin{itemize}
+  \item
+    通过对三角波进行平移、翻转和尺度变换的实验，验证了时间变换的基本原理。
+  \item
+    这种变换不仅改变了信号的形状，还反映出信号在时域中的局部结构，说明时域操作如何影响信号特性。
+  \end{itemize}
+\item
+  \textbf{卷积运算的验证（实验二）}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    对连续时间和离散时间信号进行卷积运算，结果证明了卷积作为线性时不变系统（LTI）的输入---输出关系的真实性。\\
+  \item
+    同时，通过构造正确的时间（或序列）向量，使得卷积结果与原信号之间实现严格对应，这说明在实际数值计算中需要关注采样间隔与信号起始时刻。\\
+  \item
+    此外，利用卷积结果与时间变化的对应关系，加深了对卷积积分（或求和）结构的理解，以及滤波、系统平滑和去噪功能的实际意义。
+  \end{itemize}
+\item
+  \textbf{傅立叶级数逼近（实验三）}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    分别采用复指数形式和三角函数形式求周期信号的傅立叶系数，并用有限项级数逼近原信号。实验结果表明：
+
+    \begin{itemize}
+    \tightlist
+    \item
+      对于连续且平滑的周期三角波，级数逼近效果较好，近似结果与真实信号非常接近。\\
+    \item
+      对于存在跳变的不连续信号（如方波），逼近过程中会出现明显的振铃现象（即吉布斯现象），这种现象在理论上不会随着截断项数的无限增多而消除。\\
+    \end{itemize}
+  \item
+    这些结果直观地展示了频域展开和逼近理论在描述信号时的优缺点，使人们能更好地理解傅立叶级数的收敛性质及其在实际工程中的应用局限。
+  \end{itemize}
+\item
+  \textbf{离散傅立叶变换及系统频率响应（实验四）}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    通过对非周期信号（例如双边指数衰减信号）的离散傅立叶变换及其插值验证，进一步展示了如何通过数值方法求解DTFT以及如何利用频域信息分析时域信号。
+  \item
+    另外，通过对差分方程系统（如
+    \(y[n] – a·y[n–1] = x[n]\)）求频率响应和单位冲激响应，直观地验证了系统的LTI特性和稳定性（参数
+    \textbar a\textbar{} \textless{} 1）。\\
+  \item
+    频率响应的幅频和相频特性曲线帮助理解系统滤波作用，而直接对应的冲激响应图形则展现了系统在时域中的特性。这为设计数字滤波器、信号处理及控制系统提供了直观支持。
+  \item
+    分别通过频域方法和时域卷积的计算，成功验证了离散傅立叶变换的卷积性质。
+  \end{itemize}
+\end{enumerate}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
