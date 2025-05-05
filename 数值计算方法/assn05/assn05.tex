@@ -1,0 +1,1606 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage{xeCJK}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{assn05}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \section{16}\label{section}
+
+给定物体直线运动数据，数据如下：
+
+\begin{longtable}[]{@{}lllllll@{}}
+\toprule\noalign{}
+时间 \(t\) (s) & 0 & 0.9 & 1.9 & 3.0 & 3.9 & 5.0 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+距离 \(s\) (m) & 0 & 10 & 30 & 50 & 80 & 110 \\
+\end{longtable}
+
+\subsection{Solution}\label{solution}
+
+假设运动方程为\\
+\[
+s(t) = A \, t^2 + B \, t
+\] 由于 \(s(0)=0\)，不需要常数项。
+
+目标是最小化残差平方和：\\
+\[
+E(A,B) = \sum_{i=1}^{n} \left[ s_i - \left( A \, t_i^2 + B \, t_i \right) \right]^2
+\]
+
+对 \(A\) 和 \(B\) 求偏导数，并令其为零：
+
+\[
+\frac{\partial E}{\partial A} = -2 \sum_{i=1}^{n} t_i^2 \left[ s_i - \left( A \, t_i^2 + B \, t_i \right) \right] = 0,
+\] \[
+\frac{\partial E}{\partial B} = -2 \sum_{i=1}^{n} t_i \left[ s_i - \left( A \, t_i^2 + B \, t_i \right) \right] = 0.
+\]
+
+整理后得到正规方程：
+
+\[
+\begin{cases}
+A\sum t_i^4 + B\sum t_i^3 = \sum t_i^2 s_i, \\
+A\sum t_i^3 + B\sum t_i^2 = \sum t_i s_i.
+\end{cases}
+\]
+
+通过求解上述线性方程组，可以得到系数 \(A\) 和 \(B\)。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib} \PY{k}{as} \PY{n+nn}{mpl}
+\PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.sans\PYZhy{}serif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SimSong}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}  \PY{c+c1}{\PYZsh{} 设置中文字体}
+\PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{axes.unicode\PYZus{}minus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{k+kc}{False}  \PY{c+c1}{\PYZsh{} 显示负号}
+
+\PY{c+c1}{\PYZsh{} 给定数据}
+\PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mf}{0.9}\PY{p}{,} \PY{l+m+mf}{1.9}\PY{p}{,} \PY{l+m+mf}{3.0}\PY{p}{,} \PY{l+m+mf}{3.9}\PY{p}{,} \PY{l+m+mf}{5.0}\PY{p}{]}\PY{p}{)}
+\PY{n}{s} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{50}\PY{p}{,} \PY{l+m+mi}{80}\PY{p}{,} \PY{l+m+mi}{110}\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 构建设计矩阵，列分别为 t\PYZca{}2 和 t}
+\PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{t}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{t}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+
+\PY{c+c1}{\PYZsh{} 使用最小二乘法求解 A 和 B，使得 s(t) = A*t\PYZca{}2 + B*t}
+\PY{n}{coeff}\PY{p}{,} \PY{n}{residuals}\PY{p}{,} \PY{n}{rank}\PY{p}{,} \PY{n}{s\PYZus{}vals} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{lstsq}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{s}\PY{p}{,} \PY{n}{rcond}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}
+\PY{n}{A}\PY{p}{,} \PY{n}{B} \PY{o}{=} \PY{n}{coeff}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{系数 A (t\PYZca{}2) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{A}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{系数 B (t) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{B}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 生成拟合曲线的数据}
+\PY{n}{t\PYZus{}fit} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{)}
+\PY{n}{s\PYZus{}fit} \PY{o}{=} \PY{n}{A} \PY{o}{*} \PY{n}{t\PYZus{}fit}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{B} \PY{o}{*} \PY{n}{t\PYZus{}fit}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{s}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{实验数据}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}fit}\PY{p}{,} \PY{n}{s\PYZus{}fit}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{拟合曲线: \PYZdl{}s(t)=}\PY{l+s+si}{\PYZob{}}\PY{n}{A}\PY{l+s+si}{:}\PY{l+s+s1}{.2f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{t\PYZca{}2+}\PY{l+s+si}{\PYZob{}}\PY{n}{B}\PY{l+s+si}{:}\PY{l+s+s1}{.2f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{t\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{时间 \PYZdl{}t\PYZdl{} (s)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{距离 \PYZdl{}s\PYZdl{} (m)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{利用最小二乘法拟合运动方程}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+系数 A (t\^{}2) = 2.3134643556096797
+系数 B (t) = 10.657588258559603
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_1_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \section{17}\label{section}
+
+已知实验数据
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule\noalign{}
+\(x_i\) & 19 & 25 & 31 & 38 & 44 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(y_i\) & 19.0 & 32.3 & 49.0 & 73.3 & 97.8 \\
+\end{longtable}
+
+要求拟合模型 \[
+y = a + b x^2,
+\] 并计算均方误差 (MSE)。
+
+\subsection{Solution}\label{solution}
+
+令预测值为\\
+\[
+\hat{y}_i = a + b x_i^2.
+\] 构造残差平方和\\
+\[
+E(a,b) = \sum_{i=1}^{n} \left[y_i - \left(a + b x_i^2\right)\right]^2.
+\] 令对 \(a\) 和 \(b\) 的偏导数为零，可得到正规方程： \[
+\begin{cases}
+n\,a + b\sum_{i=1}^{n}x_i^2 = \sum_{i=1}^{n}y_i,\\[1mm]
+a\sum_{i=1}^{n}x_i^2 + b\sum_{i=1}^{n}x_i^4 = \sum_{i=1}^{n}x_i^2\,y_i.
+\end{cases}
+\]
+
+使用 python 进行求解。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+
+\PY{c+c1}{\PYZsh{} 给定数据}
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{19}\PY{p}{,} \PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{31}\PY{p}{,} \PY{l+m+mi}{38}\PY{p}{,} \PY{l+m+mi}{44}\PY{p}{]}\PY{p}{)}
+\PY{n}{y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{19.0}\PY{p}{,} \PY{l+m+mf}{32.3}\PY{p}{,} \PY{l+m+mf}{49.0}\PY{p}{,} \PY{l+m+mf}{73.3}\PY{p}{,} \PY{l+m+mf}{97.8}\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 构建设计矩阵 X，其中第一列全为 1，第二列为 x\PYZca{}2}
+\PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{ones\PYZus{}like}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+
+\PY{c+c1}{\PYZsh{} 求解正规方程，得到最小二乘解 [a, b]}
+\PY{n}{coeff}\PY{p}{,} \PY{n}{residuals}\PY{p}{,} \PY{n}{rank}\PY{p}{,} \PY{n}{s\PYZus{}vals} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{lstsq}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{rcond}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}
+\PY{n}{a}\PY{p}{,} \PY{n}{b} \PY{o}{=} \PY{n}{coeff}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{拟合参数 a =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{拟合参数 b =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{b}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 计算预测值}
+\PY{n}{y\PYZus{}pred} \PY{o}{=} \PY{n}{a} \PY{o}{+} \PY{n}{b} \PY{o}{*} \PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+
+\PY{c+c1}{\PYZsh{} 计算均方误差 (MSE)}
+\PY{n}{MSE} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{(}\PY{n}{y} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}pred}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{均方误差 MSE =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{MSE}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 生成拟合曲线数据用于绘图}
+\PY{n}{x\PYZus{}fit} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{n+nb}{min}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n+nb}{max}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{)}
+\PY{n}{y\PYZus{}fit} \PY{o}{=} \PY{n}{a} \PY{o}{+} \PY{n}{b} \PY{o}{*} \PY{n}{x\PYZus{}fit}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{实验数据}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}fit}\PY{p}{,} \PY{n}{y\PYZus{}fit}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{拟合曲线: \PYZdl{}y=}\PY{l+s+si}{\PYZob{}}\PY{n}{a}\PY{l+s+si}{:}\PY{l+s+s1}{.3f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{+}\PY{l+s+si}{\PYZob{}}\PY{n}{b}\PY{l+s+si}{:}\PY{l+s+s1}{.5f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{x\PYZca{}2\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{最小二乘法拟合模型 \PYZdl{}y=a+bx\PYZca{}2\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+拟合参数 a = 0.9725786569067812
+拟合参数 b = 0.05003512421916013
+均方误差 MSE = 0.0030046417891329913
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_3_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{18}\label{section}
+
+实验数据为
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.2727}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0606}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+时间 \(t\) (s)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+5
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+10
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+15
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+20
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+25
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+30
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+35
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+45
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+50
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+55
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+浓度 \(y\,(\times10^{-4})\) & 0 & 1.27 & 2.16 & 2.86 & 3.44 & 3.87 &
+4.15 & 4.37 & 4.51 & 4.58 & 4.62 & 4.64 \\
+\end{longtable}
+
+使用最小二乘法求 \(y = f(t)\)
+
+\subsection{Solution}\label{solution}
+
+使用更符合化学反应条件的一阶反应的动力学模型进行拟合，其形式为
+
+\[
+y(t)= C\Bigl(1-\exp(-kt)\Bigr),
+\]
+
+该模型满足初值条件 \(y(0)=0\) 且当 \(t\to\infty\) 时
+\(y(t)\to C\)，比较符合实际反应过程。
+
+目标是最小化残差平方和
+
+\[
+E(C,k)= \sum_{i=1}^{n}\Bigl[y_i - C\Bigl(1-\exp(-k\,t_i)\Bigr)\Bigr]^2.
+\]
+
+由于该模型是非线性的，故利用 Python 中的 \texttt{curve\_fit}求解参数
+\(C\) 和 \(k\)。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{optimize} \PY{k+kn}{import} \PY{n}{curve\PYZus{}fit}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib} \PY{k}{as} \PY{n+nn}{mpl}
+
+\PY{c+c1}{\PYZsh{} 设置中文字体和负号显示}
+\PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.sans\PYZhy{}serif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SimSong}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{axes.unicode\PYZus{}minus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{k+kc}{False}
+
+\PY{c+c1}{\PYZsh{} 给定数据}
+\PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{15}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{30}\PY{p}{,} \PY{l+m+mi}{35}\PY{p}{,} \PY{l+m+mi}{40}\PY{p}{,} \PY{l+m+mi}{45}\PY{p}{,} \PY{l+m+mi}{50}\PY{p}{,} \PY{l+m+mi}{55}\PY{p}{]}\PY{p}{)}
+\PY{n}{y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mf}{1.27}\PY{p}{,} \PY{l+m+mf}{2.16}\PY{p}{,} \PY{l+m+mf}{2.86}\PY{p}{,} \PY{l+m+mf}{3.44}\PY{p}{,} \PY{l+m+mf}{3.87}\PY{p}{,} \PY{l+m+mf}{4.15}\PY{p}{,} \PY{l+m+mf}{4.37}\PY{p}{,} \PY{l+m+mf}{4.51}\PY{p}{,} \PY{l+m+mf}{4.58}\PY{p}{,} \PY{l+m+mf}{4.62}\PY{p}{,} \PY{l+m+mf}{4.64}\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 定义一阶反应模型： y(t) = C * (1 \PYZhy{} exp(\PYZhy{}k * t))}
+\PY{k}{def} \PY{n+nf}{model}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{C}\PY{p}{,} \PY{n}{k}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{C} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{k} \PY{o}{*} \PY{n}{t}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 提供初始猜测，C初猜为数据末值，k初猜可选0.1}
+\PY{n}{p0} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{4.64}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} 使用 curve\PYZus{}fit 进行非线性拟合}
+\PY{n}{params}\PY{p}{,} \PY{n}{covariance} \PY{o}{=} \PY{n}{curve\PYZus{}fit}\PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{p0}\PY{o}{=}\PY{n}{p0}\PY{p}{)}
+\PY{n}{C}\PY{p}{,} \PY{n}{k} \PY{o}{=} \PY{n}{params}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{拟合参数 C =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{C}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{拟合参数 k =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{k}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 生成拟合曲线数据}
+\PY{n}{t\PYZus{}fit} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{55}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{)}
+\PY{n}{y\PYZus{}fit} \PY{o}{=} \PY{n}{model}\PY{p}{(}\PY{n}{t\PYZus{}fit}\PY{p}{,} \PY{n}{C}\PY{p}{,} \PY{n}{k}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{实验数据}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t\PYZus{}fit}\PY{p}{,} \PY{n}{y\PYZus{}fit}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{拟合曲线: \PYZdl{}y(t)=}\PY{l+s+si}{\PYZob{}}\PY{n}{C}\PY{l+s+si}{:}\PY{l+s+s1}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{(1\PYZhy{}e\PYZca{}}\PY{l+s+se}{\PYZob{}\PYZob{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+si}{\PYZob{}}\PY{n}{k}\PY{l+s+si}{:}\PY{l+s+s1}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{t}\PY{l+s+se}{\PYZcb{}\PYZcb{}}\PY{l+s+s1}{)\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{时间 \PYZdl{}t\PYZdl{} (s)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{浓度 \PYZdl{}y\PYZdl{} (\PYZdl{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{times10\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{\PYZhy{}4\PYZcb{}\PYZdl{})}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{最小二乘法拟合模型\PYZdl{}y(t) = C(1\PYZhy{}e\PYZca{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{\PYZhy{}kt\PYZcb{})\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+拟合参数 C = 4.900232518079594
+拟合参数 k = 0.060402839872791304
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_5_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \section{22}\label{section}
+
+求
+
+\[
+f(x) = \frac{1}{x} \ln (1 + x)
+\]
+
+在 \(x = 0\) 处的 \((1, 1)\) 阶帕德逼近 \(R_{11}(x)\)
+
+\subsection{Solution}\label{solution}
+
+由于 \[
+\ln(1+x)= x -\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+\cdots,
+\] 故 \[
+f(x)=\frac{1}{x}\ln(1+x) = 1-\frac{x}{2}+\frac{x^2}{3}-\frac{x^3}{4}+\cdots.
+\]
+
+设 \((1,1)\) 阶帕德逼近为
+
+\[
+R_{11}(x)=\frac{a_0+a_1 x}{1+b_1 x}.
+\] 展开 \(R_{11}(x)\)： \[
+R_{11}(x)= \bigl(a_0+a_1x\bigr)\left(1-b_1x+b_1^2x^2+\cdots\right)
+= a_0 + (a_1-a_0b_1)x + (a_0b_1^2-a_1b_1)x^2+\cdots.
+\]
+
+要求 \(R_{11}(x)\) 与 \(f(x)\) 的展开一致至 \(x^2\) 阶，因此需满足： \[
+\begin{cases}
+a_0=1,\\[1mm]
+a_1-a_0b_1=a_1-b_1=-\dfrac{1}{2},\\[1mm]
+a_0b_1^2-a_1b_1=b_1^2-a_1b_1=\dfrac{1}{3}.
+\end{cases}
+\]
+
+令 \(a_0=1\)，则由第二个方程有 \[
+a_1=b_1-\frac{1}{2}.
+\] 代入第三个方程： \[
+b_1^2-\left(b_1-\frac{1}{2}\right)b_1 = b_1^2 - b_1^2+\frac{1}{2}b_1 = \frac{b_1}{2}=\frac{1}{3}.
+\] 从而 \[
+b_1=\frac{2}{3}.
+\] \[
+a_1=\frac{2}{3}-\frac{1}{2}=\frac{4-3}{6}=\frac{1}{6}.
+\]
+
+因此，\((1,1)\) 阶帕德逼近为 \[
+\boxed{R_{11}(x)=\frac{1+\frac{1}{6}x}{1+\frac{2}{3}x}.}
+\]
+
+    \section{24}\label{section}
+
+使用 FFT 算法，求函数 \(f(x) = |x|\) 在 \([-\pi, \pi]\) 上的 4
+次三角插值多项式 \(S_4(x)\)
+
+\section{Solution}\label{solution}
+
+使用 python 完成 FFT 算法的计算。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{math}
+
+\PY{k}{def} \PY{n+nf}{manual\PYZus{}fft}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{n}{N} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+    \PY{n}{X} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{:}
+        \PY{n}{s} \PY{o}{=} \PY{l+m+mi}{0} \PY{o}{+} \PY{l+m+mi}{0}\PY{n}{j}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{:}
+            \PY{n}{angle} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{math}\PY{o}{.}\PY{n}{pi} \PY{o}{*} \PY{n}{j} \PY{o}{*} \PY{n}{k} \PY{o}{/} \PY{n}{N}
+            \PY{n}{s} \PY{o}{+}\PY{o}{=} \PY{n}{x}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n+nb}{complex}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{n}{angle}\PY{p}{)}\PY{p}{,} \PY{n}{math}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{angle}\PY{p}{)}\PY{p}{)}
+        \PY{n}{X}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{s}\PY{p}{)}
+    \PY{k}{return} \PY{n}{X}
+
+\PY{c+c1}{\PYZsh{} 采样点数 N = 9，采样区间为 [\PYZhy{}π, π]}
+\PY{n}{N} \PY{o}{=} \PY{l+m+mi}{9}
+\PY{n}{j} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{N}\PY{p}{)}
+\PY{n}{x\PYZus{}samples} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{math}\PY{o}{.}\PY{n}{pi} \PY{o}{+} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{math}\PY{o}{.}\PY{n}{pi} \PY{o}{*} \PY{n}{j} \PY{o}{/} \PY{n}{N}
+\PY{n}{f\PYZus{}samples} \PY{o}{=} \PY{p}{[}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{xi}\PY{p}{)} \PY{k}{for} \PY{n}{xi} \PY{o+ow}{in} \PY{n}{x\PYZus{}samples}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} 计算 DFT 并归一化}
+\PY{n}{X} \PY{o}{=} \PY{n}{manual\PYZus{}fft}\PY{p}{(}\PY{n}{f\PYZus{}samples}\PY{p}{)}
+\PY{n}{X\PYZus{}normalized} \PY{o}{=} \PY{p}{[}\PY{n}{val} \PY{o}{/} \PY{n}{N} \PY{k}{for} \PY{n}{val} \PY{o+ow}{in} \PY{n}{X}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} 由于采样区间为 [\PYZhy{}π, π]，而标准 DFT 是针对 [0,2π]，}
+\PY{c+c1}{\PYZsh{} 因此需要对傅里叶系数乘以修正因子 exp(iπk) = (\PYZhy{}1)\PYZca{}k。}
+\PY{n}{c0} \PY{o}{=} \PY{n}{X\PYZus{}normalized}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{real}  \PY{c+c1}{\PYZsh{} k = 0不变}
+\PY{n}{c} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n}{c\PYZus{}k\PYZus{}corrected} \PY{o}{=} \PY{n}{X\PYZus{}normalized}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{o}{.}\PY{n}{real} \PY{o}{*} \PY{p}{(}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{n}{k}\PY{p}{)}
+    \PY{n}{c}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{c\PYZus{}k\PYZus{}corrected}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{S4}\PY{p}{(}\PY{n}{x\PYZus{}val}\PY{p}{)}\PY{p}{:}
+    \PY{n}{S} \PY{o}{=} \PY{n}{c0}
+    \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+        \PY{n}{S} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{c}\PY{p}{[}\PY{n}{k} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{*} \PY{n}{math}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{x\PYZus{}val}\PY{p}{)}
+    \PY{k}{return} \PY{n}{S}
+
+\PY{c+c1}{\PYZsh{} 画出原函数 |x| 和 4 次三角插值多项式 S4(x)}
+\PY{n}{x\PYZus{}fine} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{math}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{n}{math}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{l+m+mi}{400}\PY{p}{)}
+\PY{n}{f\PYZus{}fine} \PY{o}{=} \PY{p}{[}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{xi}\PY{p}{)} \PY{k}{for} \PY{n}{xi} \PY{o+ow}{in} \PY{n}{x\PYZus{}fine}\PY{p}{]}
+\PY{n}{S4\PYZus{}fine} \PY{o}{=} \PY{p}{[}\PY{n}{S4}\PY{p}{(}\PY{n}{xi}\PY{p}{)} \PY{k}{for} \PY{n}{xi} \PY{o+ow}{in} \PY{n}{x\PYZus{}fine}\PY{p}{]}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}fine}\PY{p}{,} \PY{n}{f\PYZus{}fine}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}|x|\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x\PYZus{}fine}\PY{p}{,} \PY{n}{S4\PYZus{}fine}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}S\PYZus{}4(x)\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{4 次三角插值多项式 \PYZdl{}S\PYZus{}4(x)\PYZdl{} of \PYZdl{}f(x)=|x|\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{傅里叶系数（归一化）：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c0 =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{c0}\PY{p}{)}
+\PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c\PYZus{}}\PY{l+s+si}{\PYZob{}}\PY{n}{k}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{c}\PY{p}{[}\PY{n}{k}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_8_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+傅里叶系数（归一化）：
+c0 = 1.5901888740392778
+c\_1 = -0.6431235280690197
+c\_2 = 0.02196156197534019
+c\_3 = -0.0775701889775252
+c\_4 = 0.033046610753371515
+    \end{Verbatim}
+
+    \section{1}\label{section}
+
+确定下列求积公式中的待定参数，使其代数精度尽量高，并指明所构造出的求积公式所具有的代数精度：
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+\end{enumerate}
+
+\[
+\int_{-2h}^{2h} f(x) dx \approx A_{-1}f(-h) + A_0f(0) + A_1f(h)
+\]
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+\end{enumerate}
+
+\[
+\int_{-1}^1 f(x)dx \approx \left[ f(-1) + 2f(x_1) + 3f(x_2) \right] / 3
+\]
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+\end{enumerate}
+
+\[
+\int_{0}^hf(x)dx \approx h[f(0) + f(h)] / 2 + ah^2[f'(0) - f'(h)]
+\]
+
+    \subsection{(2) 求积公式}\label{ux6c42ux79efux516cux5f0f}
+
+\[
+\int_{-2h}^{2h} f(x)\,dx \approx A_{-1} f(-h) + A_0 f(0) + A_1 f(h).
+\]
+
+令其对 \(f(x)=1,x,x^2,x^3,\dots\) 精确，建立以下条件：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  当 \(f(x)=1\) 时， \[
+  \int_{-2h}^{2h}1\,dx=4h,\quad
+  A_{-1}+A_0+A_1=4h.
+  \]
+\item
+  当 \(f(x)=x\) 时， \[
+  \int_{-2h}^{2h}x\,dx=0,\quad
+  -hA_{-1}+0\cdot A_0+hA_1=0 \quad\Longrightarrow\quad A_1=A_{-1}.
+  \]
+\item
+  当 \(f(x)=x^2\) 时， \[
+  \int_{-2h}^{2h}x^2\,dx = \left[\frac{x^3}{3}\right]_{-2h}^{2h} = \frac{16h^3}{3},
+  \] 而右侧为 \[
+  A_{-1}(h^2)+A_0\cdot0^2+A_1(h^2) = (A_{-1}+A_{1})h^2=2A_{-1}\,h^2.
+  \] 故有 \[
+  2A_{-1}\,h^2 = \frac{16h^3}{3}\quad\Longrightarrow\quad A_{-1}=\frac{8h}{3}.
+  \] 从而 \(A_1=\frac{8h}{3}\)。
+\item
+  由条件 (1) 得： \[
+  \frac{8h}{3} + A_0 + \frac{8h}{3} = 4h
+  \quad\Longrightarrow\quad A_0=4h-\frac{16h}{3}=-\frac{4h}{3}.
+  \]
+\end{enumerate}
+
+检验 (f(x)=x\^{}3) 时： \[
+\int_{-2h}^{2h}x^3\,dx=0,\quad
+-A_{-1}h^3+A_1h^3=0,
+\] 自动成立。
+
+但对于 \(f(x)=x^4\) 不精确，因此此公式在多项式上的最大精度为\textbf{3}。
+
+\[\boxed{
+A_{-1}=\dfrac{8h}{3},\quad A_0=-\dfrac{4h}{3},\quad A_1=\dfrac{8h}{3}.}
+\],
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{(3) 求积公式}\label{ux6c42ux79efux516cux5f0f-1}
+
+\[
+\int_{-1}^1 f(x)\,dx \approx \frac{f(-1)+2f(x_1)+3f(x_2)}{3}.
+\]
+
+设对多项式 \(f(x)=1, x, x^2\) 精确。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  当 \(f(x)=1\) 时， \[
+  \int_{-1}^1 1\,dx =2,\quad \frac{1+2+3}{3}=\frac{6}{3}=2.
+  \] 自动成立。
+\item
+  当 \(f(x)=x\) 时， \[
+  \int_{-1}^1 x\,dx =0,\quad
+  \frac{(-1)+2x_1+3x_2}{3}=0 \quad\Longrightarrow\quad -1+2x_1+3x_2=0.
+  \] 记作（Ⅰ）：\\
+  \[
+  2x_1+3x_2=1.
+  \]
+\item
+  当 \(f(x)=x^2\) 时， \[
+  \int_{-1}^1 x^2\,dx = \frac{2}{3},\quad
+  \frac{1+2x_1^2+3x_2^2}{3}=\frac{2}{3}\quad\Longrightarrow\quad 1+2x_1^2+3x_2^2=2.
+  \] 即（Ⅱ）： \[
+  2x_1^2+3x_2^2=1.
+  \]
+\end{enumerate}
+
+从（Ⅰ）可解得 \[
+x_1=\frac{1-3x_2}{2}.
+\]
+
+将其代入（Ⅱ）： \[
+2\left(\frac{1-3x_2}{2}\right)^2+3x_2^2=1
+\quad\Longrightarrow\quad \frac{(1-3x_2)^2}{2}+3x_2^2=1.
+\]
+
+解二次方程： \[
+x_2=\frac{3\pm2\sqrt{6}}{15}.
+\]
+
+为使节点按递增顺序（且落在 ({[}-1,1{]}) 内），取 \[
+x_2=\frac{3+2\sqrt{6}}{15}\quad\text{(约 }0.5266\text{)},
+\] 则从（Ⅰ）有 \[
+x_1=\frac{1-3x_2}{2}=\frac{1-\sqrt{6}}{5}\quad\text{(约 }-0.2899\text{)}.
+\]
+
+验证： - 对 \(f(x)=1\) 和 \(f(x)=x\) 均满足， - 检验 \(f(x)=x^2\)
+自动成立。
+
+对于 \(f(x)=x^3\) 不满足，因此此公式能精确积分次数不超过 2。
+
+\[\boxed{
+x_1=\dfrac{1-\sqrt{6}}{5},\quad x_2=\dfrac{3+2\sqrt{6}}{15}.}
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{(4) 求积公式}\label{ux6c42ux79efux516cux5f0f-2}
+
+\[
+\int_{0}^{h} f(x)\,dx \approx \frac{h\bigl[f(0)+f(h)\bigr]}{2} + a\,h^2\Bigl[f'(0)-f'(h)\Bigr].
+\]
+
+利用泰勒展开，令 \[
+f(x)=f(0)+f'(0)x+\frac{f''(0)x^2}{2}+\frac{f'''(0)x^3}{6}+\cdots.
+\]
+
+积分展开为 \[
+\begin{aligned}
+I &=\int_{0}^{h} f(x)\,dx
+=\int_{0}^{h}\Bigl[f(0)+f'(0)x+\frac{f''(0)x^2}{2}+\frac{f'''(0)x^3}{6}+\cdots\Bigr]dx\\[1mm]
+&=f(0)h+\frac{f'(0)h^2}{2}+\frac{f''(0)h^3}{6}+\frac{f'''(0)h^4}{24}+\cdots.
+\end{aligned}
+\]
+
+先展开 \[
+\frac{h\bigl[f(0)+f(h)\bigr]}{2}.
+\] 注意
+\(f(h)=f(0)+f'(0)h+\frac{f''(0)h^2}{2}+\frac{f'''(0)h^3}{6}+\cdots\)；
+因此， \[
+\begin{aligned}
+\frac{h[f(0)+f(h)]}{2} &=\frac{h}{2}\Bigl[2f(0)+f'(0)h+\frac{f''(0)h^2}{2}+\frac{f'''(0)h^3}{6}+\cdots\Bigr]\\[1mm]
+&= f(0)h+\frac{f'(0)h^2}{2}+\frac{f''(0)h^3}{4}+\frac{f'''(0)h^4}{12}+\cdots.
+\end{aligned}
+\]
+
+再展开 \[
+a\,h^2\Bigl[f'(0)-f'(h)\Bigr].
+\] 由于 \[
+f'(h)=f'(0)+f''(0)h+\frac{f'''(0)h^2}{2}+\cdots,
+\] 有 \[
+f'(0)-f'(h)=-f''(0)h-\frac{f'''(0)h^2}{2}-\cdots,
+\] 因此， \[
+a\,h^2\Bigl[f'(0)-f'(h)\Bigr]=-a\,f''(0)h^3-\frac{a\,f'''(0)h^4}{2}+\cdots.
+\]
+
+合并后，求积公式给出 \[
+\begin{aligned}
+Q &= f(0)h+\frac{f'(0)h^2}{2}+\Bigl(\frac{f''(0)}{4}-a\,f''(0)\Bigr)h^3
++\Bigl(\frac{f'''(0)}{12}-\frac{a\,f'''(0)}{2}\Bigr)h^4+\cdots\\[1mm]
+&= f(0)h+\frac{f'(0)h^2}{2} + \left(\frac{1}{4}-a\right)f''(0)h^3
++\left(\frac{1}{12}-\frac{a}{2}\right)f'''(0)h^4+\cdots.
+\end{aligned}
+\]
+
+要求 \(Q\) 与真实积分展开一致，即： - \(h^1\) 与 \(h^2\) 项自动匹配， -
+对 \(h^3\) 项要求 \[
+  \frac{1}{4}-a=\frac{1}{6}\quad\Longrightarrow\quad a=\frac{1}{4}-\frac{1}{6}=\frac{1}{12}.
+  \] - 此时 \(h^4\) 项为 \[
+  \frac{1}{12}-\frac{a}{2} = \frac{1}{12}-\frac{1}{24}=\frac{1}{24},
+  \] 同真实值一致。
+
+故
+
+\[\boxed{
+a=\frac{1}{12}.
+}
+\]
+
+此时该公式对 \(f(x)\) 的泰勒展开至 \(h^4\)
+项吻合，即它对多项式的精度达到\textbf{3}。
+
+    \section{2(3)}\label{section}
+
+分别用梯形公式和辛普森公式计算下列积分
+
+\[
+\int_{0}^{\pi /6} \sqrt{4 - \sin^2(\varphi)} \,d\varphi, \quad n = 6
+\]
+
+\subsection{Solution}\label{solution}
+
+积分区间为 \([a, b] = [0, \pi/6]\)，步长\\
+\[
+h = \frac{b-a}{n}=\frac{\pi/6}{6}=\frac{\pi}{36}.
+\]
+
+复合梯形公式为\\
+\[
+T = \frac{h}{2}\Bigl[f(x_0)+f(x_n)+2\sum_{j=1}^{n-1}f(x_j)\Bigr],
+\] 复合辛普森公式为\\
+\[
+S = \frac{h}{6}\Bigl[f(a)+4\sum_{k = 0}^{n - 1}f(x_{k + 1/2})+2\sum_{k=1}^{n-1}f(x_j) + f(b)\Bigr].
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+
+\PY{k}{def} \PY{n+nf}{f}\PY{p}{(}\PY{n}{phi}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{4} \PY{o}{\PYZhy{}} \PY{n}{np}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{phi}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 积分区间 [a, b] = [0, π/6]，分割数 n = 6}
+\PY{n}{a} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{n}{b} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{pi} \PY{o}{/} \PY{l+m+mi}{6}
+\PY{n}{n} \PY{o}{=} \PY{l+m+mi}{6}
+\PY{n}{h} \PY{o}{=} \PY{p}{(}\PY{n}{b} \PY{o}{\PYZhy{}} \PY{n}{a}\PY{p}{)} \PY{o}{/} \PY{n}{n}  \PY{c+c1}{\PYZsh{} h = π/36}
+
+\PY{c+c1}{\PYZsh{} 生成节点：x0, x1, ..., x6}
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{n}{a}\PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{n}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} 计算每个小区间的中点}
+\PY{n}{x\PYZus{}mid} \PY{o}{=} \PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{+} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2}
+
+\PY{c+c1}{\PYZsh{} 按照复合梯形公式计算}
+\PY{n}{T} \PY{o}{=} \PY{n}{h}\PY{o}{/}\PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(} \PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)} \PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{复合梯形公式近似：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{T}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 按照复合辛普森公式计算}
+\PY{n}{S} \PY{o}{=} \PY{n}{h}\PY{o}{/}\PY{l+m+mi}{6} \PY{o}{*} \PY{p}{(} \PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+            \PY{o}{+} \PY{l+m+mi}{4} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{x\PYZus{}mid}\PY{p}{)}\PY{p}{)}
+            \PY{o}{+} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{p}{)} \PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{复合辛普森公式近似：}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{S}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+复合梯形公式近似： 1.0356219003136578
+复合辛普森公式近似： 1.0357638857574465
+    \end{Verbatim}
+
+    \section{3}\label{section}
+
+直接验证柯特斯公式
+
+\[
+C = \frac{b - a}{90}\left[7f(x_0) + 32f(x_1) + 12f(x_2) + 32f(x_3) + 7f(x_4)\right]
+\]
+
+其中，\(x_k = a + kh, \quad h = \frac{b - a}{4}\)
+
+具有 5 次代数精度。
+
+\subsection{Solution}\label{solution}
+
+\subsubsection{\texorpdfstring{1. 当 \(f(x)=1\)
+时}{1. 当 f(x)=1 时}}\label{ux5f53-fx1-ux65f6}
+
+\begin{itemize}
+\item
+  \textbf{精确积分：} \[
+  I = \int_0^4 1\,dx=4.
+  \]
+\item
+  \textbf{柯特斯公式计算：} \[
+  C(1)=\frac{4}{90}\Bigl[7\cdot1+32\cdot1+12\cdot1+32\cdot1+7\cdot1\Bigr]=4.
+  \]
+\end{itemize}
+
+因此，二者相等。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{2. 当 \(f(x)=x\)
+时}{2. 当 f(x)=x 时}}\label{ux5f53-fxx-ux65f6}
+
+\begin{itemize}
+\item
+  \textbf{精确积分：} \[
+  I = \int_0^4 x\,dx=\frac{4^2}{2}=8.
+  \]
+\item
+  \textbf{柯特斯公式计算：} \[
+  \begin{aligned}
+  C(x)
+  &=\frac{4}{90}\Bigl[7\cdot0+32\cdot1+12\cdot2+32\cdot3+7\cdot4\Bigr]\\[1mm]&=8.
+  \end{aligned}
+  \]
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{3. 当 \(f(x)=x^2\)
+时}{3. 当 f(x)=x\^{}2 时}}\label{ux5f53-fxx2-ux65f6}
+
+\begin{itemize}
+\item
+  \textbf{精确积分：} \[
+  I = \int_0^4 x^2\,dx = \frac{4^3}{3} = \frac{64}{3}.
+  \]
+\item
+  \textbf{柯特斯公式计算：} \[
+  \begin{aligned}
+  C(x^2)
+  &=\frac{4}{90}\Bigl[7\cdot0^2+32\cdot1^2+12\cdot2^2+32\cdot3^2+7\cdot4^2\Bigr]\\[1mm]&= \frac{64}{3}.
+  \end{aligned}
+  \]
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{4. 当 \(f(x)=x^3\)
+时}{4. 当 f(x)=x\^{}3 时}}\label{ux5f53-fxx3-ux65f6}
+
+\begin{itemize}
+\item
+  \textbf{精确积分：} \[
+  I = \int_0^4 x^3\,dx = \frac{4^4}{4} = 64.
+  \]
+\item
+  \textbf{柯特斯公式计算：} \[
+  \begin{aligned}
+  C(x^3)
+  &=\frac{4}{90}\Bigl[7\cdot0^3+32\cdot1^3+12\cdot2^3+32\cdot3^3+7\cdot4^3\Bigr]\\[1mm]&= 64.
+  \end{aligned}
+  \]
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{5. 当 \(f(x)=x^4\)
+时}{5. 当 f(x)=x\^{}4 时}}\label{ux5f53-fxx4-ux65f6}
+
+\begin{itemize}
+\item
+  \textbf{精确积分：} \[
+  I = \int_0^4 x^4\,dx = \frac{4^5}{5} = \frac{1024}{5}.
+  \]
+\item
+  \textbf{柯特斯公式计算：} \[
+  \begin{aligned}
+  C(x^4)
+  &=\frac{4}{90}\Bigl[7\cdot0^4+32\cdot1^4+12\cdot2^4+32\cdot3^4+7\cdot4^4\Bigr]\\[1mm]&= \frac{1024}{5}.
+  \end{aligned}
+  \]
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{6. 当 \(f(x)=x^5\)
+时}{6. 当 f(x)=x\^{}5 时}}\label{ux5f53-fxx5-ux65f6}
+
+\begin{itemize}
+\item
+  \textbf{精确积分：} \[
+  I = \int_0^4 x^5\,dx = \frac{4^6}{6} = \frac{2048}{3}.
+  \]
+\item
+  \textbf{柯特斯公式计算：} \[
+  \begin{aligned}
+  C(x^5)
+  &=\frac{4}{90}\Bigl[7\cdot0^5+32\cdot1^5+12\cdot2^5+32\cdot3^5+7\cdot4^5\Bigr]\\[1mm]
+  &=\frac{2048}{3}
+  \end{aligned}
+  \]
+\end{itemize}
+
+使用 python 进行验证。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{sympy} \PY{k}{as} \PY{n+nn}{sp}
+
+\PY{c+c1}{\PYZsh{} 定义变量和区间}
+\PY{n}{x} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{real}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{a\PYZus{}val} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Integer}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{b\PYZus{}val} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Integer}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{h} \PY{o}{=} \PY{p}{(}\PY{n}{b\PYZus{}val} \PY{o}{\PYZhy{}} \PY{n}{a\PYZus{}val}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{4}  \PY{c+c1}{\PYZsh{} h = 1}
+
+\PY{c+c1}{\PYZsh{} 定义节点（符号表达式）和权重（符号）}
+\PY{n}{nodes} \PY{o}{=} \PY{p}{[}\PY{n}{a\PYZus{}val} \PY{o}{+} \PY{n}{i} \PY{o}{*} \PY{n}{h} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{]}  \PY{c+c1}{\PYZsh{} x0, x1, x2, x3, x4}
+\PY{n}{weights} \PY{o}{=} \PY{p}{[}\PY{n}{sp}\PY{o}{.}\PY{n}{Integer}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{)}\PY{p}{,} \PY{n}{sp}\PY{o}{.}\PY{n}{Integer}\PY{p}{(}\PY{l+m+mi}{32}\PY{p}{)}\PY{p}{,} \PY{n}{sp}\PY{o}{.}\PY{n}{Integer}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{)}\PY{p}{,} \PY{n}{sp}\PY{o}{.}\PY{n}{Integer}\PY{p}{(}\PY{l+m+mi}{32}\PY{p}{)}\PY{p}{,} \PY{n}{sp}\PY{o}{.}\PY{n}{Integer}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{)}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} 定义柯特斯公式（Boole 公式）的符号近似}
+\PY{k}{def} \PY{n+nf}{cotes\PYZus{}approx}\PY{p}{(}\PY{n}{f\PYZus{}expr}\PY{p}{)}\PY{p}{:}
+    \PY{n}{approx} \PY{o}{=} \PY{p}{(}\PY{n}{b\PYZus{}val} \PY{o}{\PYZhy{}} \PY{n}{a\PYZus{}val}\PY{p}{)} \PY{o}{/} \PY{n}{sp}\PY{o}{.}\PY{n}{Integer}\PY{p}{(}\PY{l+m+mi}{90}\PY{p}{)} \PY{o}{*} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{w} \PY{o}{*} \PY{n}{f\PYZus{}expr}\PY{o}{.}\PY{n}{subs}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{xi}\PY{p}{)} \PY{k}{for} \PY{n}{w}\PY{p}{,} \PY{n}{xi} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{weights}\PY{p}{,} \PY{n}{nodes}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{sp}\PY{o}{.}\PY{n}{simplify}\PY{p}{(}\PY{n}{approx}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 定义符号化的精确积分}
+\PY{k}{def} \PY{n+nf}{exact\PYZus{}integral}\PY{p}{(}\PY{n}{f\PYZus{}expr}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{sp}\PY{o}{.}\PY{n}{integrate}\PY{p}{(}\PY{n}{f\PYZus{}expr}\PY{p}{,} \PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{a\PYZus{}val}\PY{p}{,} \PY{n}{b\PYZus{}val}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} 验证多项式 f(x)=x\PYZca{}k, k = 0,...,5 的精确性，并以符号形式显示近似值与精确积分}
+\PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{)}\PY{p}{:}
+    \PY{n}{f\PYZus{}expr} \PY{o}{=} \PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{n}{k}
+    \PY{n}{approx\PYZus{}val} \PY{o}{=} \PY{n}{cotes\PYZus{}approx}\PY{p}{(}\PY{n}{f\PYZus{}expr}\PY{p}{)}
+    \PY{n}{exact\PYZus{}val} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{simplify}\PY{p}{(}\PY{n}{exact\PYZus{}integral}\PY{p}{(}\PY{n}{f\PYZus{}expr}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{对于 f(x)=x\PYZca{}}\PY{l+s+si}{\PYZob{}}\PY{n}{k}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, 柯特斯公式:}\PY{l+s+si}{\PYZob{}}\PY{n}{sp}\PY{o}{.}\PY{n}{pretty}\PY{p}{(}\PY{n}{approx\PYZus{}val}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, 精确积分: }\PY{l+s+si}{\PYZob{}}\PY{n}{sp}\PY{o}{.}\PY{n}{pretty}\PY{p}{(}\PY{n}{exact\PYZus{}val}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+对于 f(x)=x\^{}0, 柯特斯公式:4, 精确积分: 4
+对于 f(x)=x\^{}1, 柯特斯公式:8, 精确积分: 8
+对于 f(x)=x\^{}2, 柯特斯公式:64/3, 精确积分: 64/3
+对于 f(x)=x\^{}3, 柯特斯公式:64, 精确积分: 64
+对于 f(x)=x\^{}4, 柯特斯公式:1024/5, 精确积分: 1024/5
+对于 f(x)=x\^{}5, 柯特斯公式:2048/3, 精确积分: 2048/3
+对于 f(x)=x\^{}6, 柯特斯公式:7040/3, 精确积分: 16384/7
+    \end{Verbatim}
+
+    \section{4}\label{section}
+
+用辛普森公式求
+
+\[
+\int_0^1 e^{-x} \, dx
+\]
+
+并估计误差。
+
+\subsection{Solution}\label{solution}
+
+对于区间 \([a,b]=[0,1]\) ，辛普森公式为
+
+\[
+S = \frac{b-a}{6}\Bigl[ f(a) + 4f\Bigl(\frac{a+b}{2}\Bigr) + f(b) \Bigr].
+\]
+
+对于 \(f(x)=e^{-x}\)，有
+
+\[
+f(0)=1,\quad f\Bigl(\frac{0+1}{2}\Bigr)= e^{-1/2},\quad f(1)=e^{-1}.
+\]
+
+因此，近似值为
+
+\[\boxed{
+S=\frac{1}{6}\Bigl[ 1 + 4e^{-1/2} + e^{-1}\Bigr].}
+\]
+
+而精确积分为
+
+\[
+I=\int_0^1 e^{-x}\,dx = 1 - e^{-1} .
+\]
+
+辛普森公式的截断误差表达式为
+
+\[
+E_S=-\frac{(b-a)^5}{180\,n^4}\,f^{(4)}(\xi),
+\] 其中 \(\xi\in[0,1]\)，该公式实际上等价于 \(n=2\) 的情形。
+
+对于 \(f(x)=e^{-x}\)，其四阶导数为
+
+\[
+f^{(4)}(x)=e^{-x},
+\] 在 \([0,1]\) 上取最大值为 \(e^0=1\)。因此，误差绝对值满足
+
+\[\boxed{
+\lvert E_S \rvert \le \frac{1^5}{180\cdot 2^4} = \frac{1}{2880}.}
+\]
+
+    \section{5}\label{section}
+
+推导下列三种矩形求积公式
+
+\[
+\begin{aligned}
+\int_a^b f(x) dx &= (b - a) f(a) + \frac{f'(\eta)}{2}(b - a)^2 \\
+\int_a^b f(x) dx &= (b - a) f(b) - \frac{f'(\eta)}{2}(b - a)^2 \\
+\int_a^b f(x) dx &= (b - a) f\left(\frac{a + b}{2}\right) + \frac{f''(\eta)}{24}(b - a)^3
+\end{aligned}
+\]
+
+\subsection{Proof}\label{proof}
+
+\subsubsection{(1)}\label{section-1}
+
+考虑对任意 \(x\in[a,b]\) 应用中值定理：存在 \(\xi=\xi(x)\) 使得
+
+\[
+f(x)-f(a)=f'(\xi)(x-a).
+\]
+
+对两边从 \(a\) 到 \(b\) 积分，有
+
+\[
+\int_a^b \bigl[f(x)-f(a)\bigr]\,dx = \int_a^b f'(\xi)(x-a)\,dx.
+\]
+
+左侧为
+
+\[
+\int_a^b f(x)\,dx - (b-a)f(a).
+\]
+
+利用中值定理，存在 \(\eta\in[a,b]\) 使得
+
+\[
+\int_a^b f'(\xi)(x-a)\,dx = f'(\eta)\int_a^b (x-a)\,dx = f'(\eta)\,\frac{(b-a)^2}{2}.
+\]
+
+因此得到
+
+\[
+\int_a^b f(x)\,dx = (b-a) f(a) + \frac{f'(\eta)}{2}(b-a)^2.
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{(2)}\label{section-2}
+
+对任意 \(x\in[a,b]\)，利用中值定理可写成
+
+\[
+f(b)-f(x)=f'(\xi)(b-x).
+\]
+
+则
+
+\[
+f(x)=f(b)-f'(\xi)(b-x).
+\]
+
+对 \(x\) 从 \(a\) 到 \(b\) 积分，
+
+\[
+\int_a^b f(x)\,dx = (b-a)f(b) - \int_a^b f'(\xi)(b-x)\,dx.
+\]
+
+利用积分中值定理，存在 \(\eta\in[a,b]\) 使得
+
+\[
+\int_a^b f'(\xi)(b-x)\,dx = f'(\eta)\int_a^b (b-x)\,dx = f'(\eta)\,\frac{(b-a)^2}{2}.
+\]
+
+因此有
+
+\[
+\int_a^b f(x)\,dx = (b-a)f(b) - \frac{f'(\eta)}{2}(b-a)^2.
+\]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{(3)}\label{section-3}
+
+记 \(m=\frac{a+b}{2}\) 为区间中点，在 \(x=m\) 处作泰勒展开
+
+\[
+f(x)=f(m)+f'(m)(x-m)+\frac{f''(\xi)}{2}(x-m)^2,
+\] 其中 \(\xi\) 介于 \(m\) 与 \(x\) 之间。
+
+由于对称性有
+
+\[
+\int_a^b (x-m)\,dx=0,
+\] 而
+
+\[
+\int_a^b (x-m)^2 dx = \frac{(b-a)^3}{12},
+\] 故
+
+\[
+\int_a^b f(x)\,dx = (b-a)f(m)+\frac{1}{2}\,\frac{(b-a)^3}{12}\,f''(\eta)
+=\,(b-a)f\left(\frac{a+b}{2}\right) + \frac{f''(\eta)}{24}(b-a)^3,
+\] 其中 \(\eta\in[a,b]\)。
+
+    \section{7}\label{section}
+
+若 \(f''(x) > 0\) 证明用梯形公式计算积分
+
+\[
+I = \int_a^b f(x) dx
+\]
+
+所得结果比准确值 \(I\) 大，并说明其几何意义。
+
+\subsection{Proof}\label{proof}
+
+由泰勒展开，在 \(x \in [a,b]\) 上有\\
+\[
+f(x)=f(a)+f'(a)(x-a)+\frac{f''(\xi)}{2}(x-a)^2,\quad \xi\in[a,x].
+\]
+
+对 \(x\) 在 \([a,b]\) 上积分得\\
+\[
+I = \int_a^b f(x)\,dx = (b-a)f(a)+\frac{f'(a)(b-a)^2}{2}+\int_a^b \frac{f''(\xi)}{2}(x-a)^2\,dx.
+\]
+
+梯形公式给出的 \(T\) 可写为\\
+\[
+T = (b-a)f(a)+\frac{f'(a)(b-a)^2}{2}+\frac{f(b)-f(a)-f'(a)(b-a)}{2}(b-a).
+\]
+
+注意到\\
+\[
+f(b)-f(a)=f'(a)(b-a)+\frac{f''(\eta)}{2}(b-a)^2 \quad (\eta\in[a,b]),
+\] 则\\
+\[
+T = (b-a)f(a)+\frac{f'(a)(b-a)^2}{2}+\frac{f''(\eta)(b-a)^3}{4}.
+\]
+
+而真实积分的余项为\\
+\[
+I = (b-a)f(a)+\frac{f'(a)(b-a)^2}{2}+\int_a^b \frac{f''(\xi)}{2}(x-a)^2\,dx.
+\] 计算积分有\\
+\[
+\int_a^b (x-a)^2 dx = \frac{(b-a)^3}{3},
+\] 则\\
+\[
+I = (b-a)f(a)+\frac{f'(a)(b-a)^2}{2}+\frac{f''(\xi)}{2}\cdot\frac{(b-a)^3}{3},
+\] 其中 \(\xi \in [a,b]\)（利用中值定理推广）。
+
+因为 \(f''(x)>0\)，所以存在某 \(\eta, \xi \in [a,b]\) 使得\\
+\[
+T - I = \frac{f''(\eta)(b-a)^3}{4} - \frac{f''(\xi)(b-a)^3}{6} > 0,
+\] （注意 \(\frac{1}{4}>\frac{1}{6}\) 且 \(f''(\cdot)>0\)）。
+
+\subsection{几何意义}\label{ux51e0ux4f55ux610fux4e49}
+
+当 \(f(x)\) 为下凸函数时，连接两端点 \((a,f(a))\) 与 \((b,f(b))\)
+的直线处处高于
+\(f(x)\)（除端点外）。因此，用这条直线构成的梯形面积必然大于曲线下面积，也就是说梯形公式对凸函数给出的是过估计。
+
+    \section{8(1)}\label{section}
+
+用龙贝格求积方法计算下列积分，使误差不超过 \(10^{-5}\)
+
+\[
+\frac{2}{\sqrt \pi} \int_0^1e^{-x} dx
+\]
+
+\subsection{Solution}\label{solution}
+
+设\\
+\[
+T(h)=\frac{h}{2}\Bigl[f(0)+f(1)\Bigr]
+\] 为用步长 \(h\)
+的复合梯形公式值（当只有一个小区间时）；然后将区间均匀二等分得到更精的近似值，再利用外推公式
+
+\[
+R(k+1, m)=\frac{4^m\,R(k+1, m-1)-R(k, m-1)}{4^m-1}
+\]
+
+逐级消去误差的低阶项。
+
+令 \(h_0=1\)。由于 \(f(x)=e^{-x}\) 得 \(f(0)=1,\quad f(1)=e^{-1}\).
+因此，初始梯形公式 \[
+R(0,0)=T(1)=\frac{1}{2}\Bigl[1+e^{-1}\Bigr].
+\]
+
+二等分，步长 \(h_1=\tfrac{1}{2}\)。复合梯形公式为 \[
+R(1,0)=T\Bigl(\frac{1}{2}\Bigr)
+=\frac{h_1}{2}\Bigl[f(0)+f(1)\Bigr] + h_1\,f\Bigl(\frac{1}{2}\Bigr)
+=\frac{1/2}{2}\Bigl[1+e^{-1}\Bigr] + \frac{1}{2}\,e^{-1/2}.
+\] 即\\
+\[
+R(1,0)=\frac{1}{4}\Bigl[1+e^{-1}\Bigr]+\frac{1}{2}\,e^{-1/2}.
+\]
+
+利用 Richardson 外推消去截断误差，得到\\
+\[
+R(0,1)=\frac{4\,R(1,0)-R(0,0)}{3}.
+\]
+
+按照该过程继续下去，直到计算精度达到 \(10^{-5}\)
+
+下面用 python 完成计算。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{math}
+
+\PY{k}{def} \PY{n+nf}{romberg\PYZus{}integration}\PY{p}{(}\PY{n}{f}\PY{p}{,} \PY{n}{a}\PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}5}\PY{p}{,} \PY{n}{max\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} 初始化第一行：T(0,0)即用一个区间的复合梯形公式}
+    \PY{n}{R} \PY{o}{=} \PY{p}{[}\PY{p}{[}\PY{l+m+mf}{0.0}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{max\PYZus{}steps}\PY{p}{)} \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{max\PYZus{}steps}\PY{p}{)}\PY{p}{]}
+    \PY{n}{R}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{b} \PY{o}{\PYZhy{}} \PY{n}{a}\PY{p}{)} \PY{o}{/} \PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{f}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{+} \PY{n}{f}\PY{p}{(}\PY{n}{b}\PY{p}{)}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 如果 max\PYZus{}steps == 1 则直接返回}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{max\PYZus{}steps}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} 计算使用 2\PYZca{}i 子区间的复合梯形公式}
+        \PY{n}{h} \PY{o}{=} \PY{p}{(}\PY{n}{b} \PY{o}{\PYZhy{}} \PY{n}{a}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{n}{i}\PY{p}{)}
+        \PY{n}{summation} \PY{o}{=} \PY{l+m+mf}{0.0}
+        \PY{c+c1}{\PYZsh{} 累加中间点：有 2\PYZca{}(i\PYZhy{}1) 个新加入的中点}
+        \PY{n}{num\PYZus{}new\PYZus{}points} \PY{o}{=} \PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{num\PYZus{}new\PYZus{}points} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n}{x} \PY{o}{=} \PY{n}{a} \PY{o}{+} \PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{k} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{n}{h}
+            \PY{n}{summation} \PY{o}{+}\PY{o}{=} \PY{n}{f}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+        \PY{n}{R}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{n}{R}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{h} \PY{o}{*} \PY{n}{summation}
+        
+        \PY{c+c1}{\PYZsh{} 使用 Richardson 外推计算其余列}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n}{R}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{4}\PY{o}{*}\PY{o}{*}\PY{n}{j} \PY{o}{*} \PY{n}{R}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{R}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{4}\PY{o}{*}\PY{o}{*}\PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} 检查误差：比较当前最高外推列与上一次同列结果的差值}
+        \PY{k}{if} \PY{n}{i} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{o+ow}{and} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{R}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{R}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{o}{\PYZlt{}} \PY{n}{tol}\PY{p}{:}
+            \PY{k}{return} \PY{n}{R}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{} 若达到 max\PYZus{}steps 后仍未满足 tol，则返回最后一个计算值}
+    \PY{k}{return} \PY{n}{R}\PY{p}{[}\PY{n}{max\PYZus{}steps}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{n}{max\PYZus{}steps}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+
+\PY{k}{def} \PY{n+nf}{main}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} 被积函数 f(x) = exp(\PYZhy{}x)}
+    \PY{k}{def} \PY{n+nf}{f}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+        \PY{k}{return} \PY{n}{math}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{x}\PY{p}{)}
+    
+    \PY{n}{a} \PY{o}{=} \PY{l+m+mf}{0.0}
+    \PY{n}{b} \PY{o}{=} \PY{l+m+mf}{1.0}
+    \PY{n}{tol} \PY{o}{=} \PY{l+m+mf}{1e\PYZhy{}5}
+    \PY{n}{I} \PY{o}{=} \PY{n}{romberg\PYZus{}integration}\PY{p}{(}\PY{n}{f}\PY{p}{,} \PY{n}{a}\PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{tol}\PY{o}{=}\PY{n}{tol}\PY{p}{,} \PY{n}{max\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+    \PY{n}{Q} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{2} \PY{o}{/} \PY{n}{math}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{pi}\PY{p}{)}\PY{p}{)} \PY{o}{*} \PY{n}{I}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Romberg integration approximate value:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Q}\PY{p}{)}
+
+\PY{k}{if} \PY{n+nv+vm}{\PYZus{}\PYZus{}name\PYZus{}\PYZus{}} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZus{}\PYZus{}main\PYZus{}\PYZus{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+    \PY{n}{main}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Romberg integration approximate value: 0.7132716698141803
+    \end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
