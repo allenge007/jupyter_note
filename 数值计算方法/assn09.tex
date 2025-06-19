@@ -1,0 +1,1665 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage{xeCJK}
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{assn09}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \section{1}\label{section}
+
+使用二分法求方程 \(x^2 - x - 1 = 0\) 的正根，要求误差小于 0.05
+
+\subsection{Solution}\label{solution}
+
+\begin{itemize}
+\tightlist
+\item
+  计算 \(f(1) = 1^2 - 1 - 1 = -1\)
+\item
+  计算 \(f(2) = 2^2 - 2 - 1 = 1\)
+\end{itemize}
+
+由于 \(f(1) < 0\) 且 \(f(2) > 0\)，根据介值定理，方程在区间 \([1, 2]\)
+内至少有一个根，且容易发现函数在 \([1, 2]\)
+区间内是单调的。因此我们选择初始区间为 \([a_0, b_0] = [1, 2]\)。
+
+进行 5 次迭代，每次计算中点 \(c_k = \frac{a_k + b_k}{2}\)。
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1017}}
+  >{\centering\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1525}}
+  >{\centering\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0678}}
+  >{\centering\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0678}}
+  >{\centering\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0847}}
+  >{\centering\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0847}}
+  >{\centering\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.2373}}
+  >{\centering\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.2034}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+迭代次数 \(k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+区间 \([a_k, b_k]\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\(f(a_k)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\(f(b_k)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+中点 \(c_k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\(f(c_k)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+新区间 \([a_{k+1}, b_{k+1}]\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+区间长度 \(b_k - a_k\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & \texttt{{[}1,\ 2{]}} & - & + & - & - & - & 1.0 \\
+1 & \texttt{{[}1,\ 2{]}} & -1 & 1 & 1.5 & -0.25 & \texttt{{[}1.5,\ 2{]}}
+& 0.5 \\
+2 & \texttt{{[}1.5,\ 2{]}} & - & + & 1.75 & 0.3125 &
+\texttt{{[}1.5,\ 1.75{]}} & 0.25 \\
+3 & \texttt{{[}1.5,\ 1.75{]}} & - & + & 1.625 & 0.0156 &
+\texttt{{[}1.5,\ 1.625{]}} & 0.125 \\
+4 & \texttt{{[}1.5,\ 1.625{]}} & - & + & 1.5625 & -0.1211 &
+\texttt{{[}1.5625,\ 1.625{]}} & 0.0625 \\
+5 & \texttt{{[}1.5625,\ 1.625{]}} & - & + & 1.59375 & -0.0537 &
+\texttt{{[}1.59375,\ 1.625{]}} & \textbf{0.03125} \\
+\end{longtable}
+
+经过 5 次迭代后，我们得到包含根的区间为
+\([1.59375, 1.625]\)。该区间的长度为
+\(1.625 - 1.59375 = 0.03125\)，这个值小于我们要求的误差 \(0.05\)。
+
+我们可以取该区间的中点作为根的近似值：
+
+\[
+x \approx \frac{1.59375 + 1.625}{2} = 1.609375
+\] 因此，方程 \(x^2 - x - 1 = 0\) 的一个近似正根是
+\textbf{1.609375}，其误差小于 0.05。
+
+    \section{3}\label{section}
+
+比较求 \(e^x + 10x - 2 = 0\) 的根到三位小数（误差小于
+0.0005）所需的计算量：
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\item
+  在区间 \([0, 1]\) 内使用二分法。
+\item
+  用迭代法 \(x_{k + 1} = (2 - e^{x_k})/10\)，取初值 \(x_0 = 0\)
+\end{enumerate}
+
+\subsection{Solution}\label{solution}
+
+\subsubsection{\texorpdfstring{(1) 在区间 \([0, 1]\)
+内使用二分法}{(1) 在区间 {[}0, 1{]} 内使用二分法}}\label{ux5728ux533aux95f4-0-1-ux5185ux4f7fux7528ux4e8cux5206ux6cd5}
+
+二分法的误差由区间长度决定。经过 \(n\) 次迭代后，误差 \(E_n\) 小于
+\(\frac{b - a}{2^n}\)。我们要求误差小于 0.0005。 \[
+\frac{1 - 0}{2^n} < 0.0005
+\] \[
+\frac{1}{2^n} < \frac{1}{2000}
+\] \[
+2^n > 2000
+\] 我们需要找到满足此条件的最小整数 \(n\)。 * \(2^{10} = 1024\) (不够) *
+\(2^{11} = 2048\) (满足条件)
+
+因此，使用二分法需要进行 \textbf{11 次迭代} 才能保证误差小于 0.0005。
+
+\subsubsection{\texorpdfstring{(2) 用迭代法
+\(x_{k + 1} = (2 - e^{x_k})/10\)}{(2) 用迭代法 x\_\{k + 1\} = (2 - e\^{}\{x\_k\})/10}}\label{ux7528ux8fedux4ee3ux6cd5-x_k-1-2---ex_k10}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{验证收敛性}:
+
+  迭代函数为
+  \(g(x) = \frac{2 - e^x}{10}\)。为了保证收敛，我们需要在根附近的区间内满足
+  \(|g'(x)| < 1\)。
+
+  \[
+  g'(x) = -\frac{e^x}{10}
+  \]
+
+  在区间 \([0, 1]\) 内：
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(|g'(0)| = |-\frac{e^0}{10}| = 0.1\)
+  \item
+    \(|g'(1)| = |-\frac{e^1}{10}| \approx 0.2718\)
+  \end{itemize}
+
+  由于在整个区间 \([0, 1]\) 内
+  \(|g'(x)| \le 0.2718 < 1\)，该迭代格式是收敛的。
+\item
+  \textbf{进行迭代计算}: 取初值 \(x_0 = 0\)，我们进行迭代直到
+  \(|x_{k+1} - x_k| < 0.0005\)。
+\end{enumerate}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+迭代次数 \(k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_k\) (当前值)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_{k+1} = (2 - e^{x_k})/10\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+误差 \({\rm abs}(x_{k+1} - x_k)\)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 0.00000 & 0.10000 & 0.10000 \\
+1 & 0.10000 & 0.08948 & 0.01052 \\
+2 & 0.08948 & 0.09064 & 0.00116 \\
+3 & 0.09064 & 0.09051 & \textbf{0.00013} \\
+\end{longtable}
+
+在第 4 次计算（即计算 \(x_4\)）之后，我们得到的误差
+\(|x_4 - x_3| \approx 0.00013\)，这个值已经小于我们要求的误差 0.0005。
+
+因此，使用该迭代法需要进行 \textbf{4 次迭代}。
+
+    \section{4}\label{section}
+
+给定函数 \(f(x)\)，设对一切 \(x\), \(f'(x)\) 存在且
+\(0 < m \le f'(x) \le M\)，证明对于范围 \(0 < \lambda < 2/M\)
+内的任意定数 \(\lambda\)，迭代过程 \(x_{k+1} = x_k - \lambda f(x_k)\)
+均收敛于 \(f(x) = 0\) 的根 \(x^*\)。
+
+\subsection{Proof}\label{proof}
+
+首先，我们将迭代过程改写为不动点迭代的形式 \(x_{k+1} = g(x_k)\)。
+令迭代函数为： \[ g(x) = x - \lambda f(x) \]
+
+\begin{quote}
+根据不动点迭代定理，如果存在一个包含根 \(x^*\) 的区间 \(I\)，使得对所有
+\(x \in I\)，都有 \(|g'(x)| \le L < 1\)（其中 \(L\)
+为一个常数），那么对于任意初值 \(x_0 \in I\)，迭代序列
+\(x_{k+1} = g(x_k)\) 必将收敛到该区间内唯一的根 \(x^*\)。
+\end{quote}
+
+我们计算 \(g(x)\) 的导数：
+\[ g'(x) = \frac{d}{dx} \left( x - \lambda f(x) \right) = 1 - \lambda f'(x) \]
+
+题目给出了两个条件：
+
+\begin{enumerate}
+\def\labelenumi{(\roman{enumi})}
+\item
+  \(0 < m \le f'(x) \le M\)
+\item
+  \(0 < \lambda < \frac{2}{M}\)
+\end{enumerate}
+
+我们利用这两个条件来确定 \(g'(x)\) 的取值范围。
+
+由条件 (i) ，我们有：
+
+\[ m \le f'(x) \le M \]
+
+因此可以得到：
+
+\[ 1 - \lambda M \le g'(x) \le 1 - \lambda m \]
+
+现在，我们需要证明 \(g'(x)\) 的范围严格地在 \((-1, 1)\) 之内。
+
+\begin{itemize}
+\item
+  \textbf{证明上界 \(g'(x) < 1\)}: 我们知道
+  \(g'(x) \le 1 - \lambda m\)。 因为 \(\lambda > 0\) 且 \(m > 0\)，所以
+  \(\lambda m > 0\)。 因此，\(1 - \lambda m < 1\)。 所以，我们得出
+  \(g'(x) < 1\)。
+\item
+  \textbf{证明下界 \(g'(x) > -1\)}:
+
+  我们知道 \(g'(x) \ge 1 - \lambda M\)。
+
+  我们利用条件 (ii) \(0 < \lambda < \frac{2}{M}\)。
+
+  从 \(\lambda < \frac{2}{M}\)，得到：
+
+  \[ 1 - \lambda M > -1 \] 所以，我们得出 \(g'(x) > -1\)。
+\end{itemize}
+
+综合以上两点，我们证明了：
+
+\[ -1 < 1 - \lambda M \le g'(x) \le 1 - \lambda m < 1 \]
+
+这意味着对所有 \(x\)，导数 \(g'(x)\) 的绝对值 \(|g'(x)|\) 被一个小于 1
+的常数 \(L = \max(|1-\lambda M|, |1-\lambda m|)\) 所界定，即
+\(|g'(x)| \le L < 1\)。
+
+因此，该迭代函数 \(g(x)\)
+是一个全局的压缩映射。根据不动点迭代定理，对于任意初始值
+\(x_0\)，迭代过程 \(x_{k+1} = g(x_k)\) 都会收敛。
+
+最后，我们验证收敛点是否为 \(f(x)=0\) 的根。设迭代收敛于 \(x^*\)，则
+\(x^*\) 满足：
+
+\[ x^* = g(x^*) \]
+
+\[ x^* = x^* - \lambda f(x^*) \]
+
+\[ 0 = -\lambda f(x^*) \]
+
+因为 \(\lambda \neq 0\)，所以必然有 \(f(x^*) = 0\)。
+
+\textbf{证毕。}
+
+    \section{7}\label{section}
+
+用下列方法求 \(f(x) = x^3 - 3x - 1 = 0\) 在 \(x_0 = 2\)
+附近的根，根的准确值
+\(x^* = 1.87938524\cdots\)，要求计算结果准确到四位有效数字。
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\item
+  用牛顿法；
+\item
+  用弦截法，取 \(x_0 = 2, x_1 = 1.9\)；
+\item
+  用抛物线法，取 \(x_0 = 1, x_1 = 3, x_2 = 2\).
+\end{enumerate}
+
+\subsection{Solution}\label{solution}
+
+\subsubsection{(1) 用牛顿法}\label{ux7528ux725bux987fux6cd5}
+
+牛顿法的迭代公式为：
+
+\[ x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)} \]
+首先，我们计算函数及其导数：
+
+\begin{itemize}
+\tightlist
+\item
+  \(f(x) = x^3 - 3x - 1\)
+\item
+  \(f'(x) = 3x^2 - 3\)
+\end{itemize}
+
+从初始值 \(x_0 = 2\) 开始迭代：
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1791}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2388}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1493}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2687}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+迭代次数 \(k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_k\) (当前值)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(f(x_k)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(f'(x_k)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_{k+1}\) (新值)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 2.000000 & 1.000000 & 9.000000 & 1.888889 \\
+1 & 1.888889 & 0.071001 & 7.703704 & 1.879671 \\
+2 & 1.879671 & 0.001856 & 7.599565 & 1.879385 \\
+3 & 1.879385 & 0.000000 & 7.596342 & 1.879385 \\
+\end{longtable}
+
+经过 3 次迭代，计算结果在小数点后六位已经稳定。结果 \texttt{1.879}
+已经精确。
+
+因此，牛顿法求得的根为 \textbf{1.879}。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{(2) 用弦截法}\label{ux7528ux5f26ux622aux6cd5}
+
+弦截法的迭代公式为：
+
+\[ x_{k+1} = x_k - f(x_k) \frac{x_k - x_{k-1}}{f(x_k) - f(x_{k-1})} \]
+
+我们从初始值 \(x_0 = 2\) 和 \(x_1 = 1.9\) 开始迭代：
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1765}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1324}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1765}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1029}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1471}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2647}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+迭代次数 \(k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_{k-1}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(f(x_{k-1})\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_k\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(f(x_k)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(x_{k+1}\) (新值)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & 2.000000 & 1.000000 & 1.900000 & 0.159000 & 1.881094 \\
+2 & 1.900000 & 0.159000 & 1.881094 & 0.011863 & 1.879411 \\
+3 & 1.881094 & 0.011863 & 1.879411 & 0.000195 & 1.879385 \\
+4 & 1.879411 & 0.000195 & 1.879385 & 0.000000 & 1.879385 \\
+\end{longtable}
+
+经过 4 次迭代，计算结果稳定。结果 \texttt{1.879} 已经精确。
+
+因此，弦截法求得的根为 \textbf{1.879}。
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{(3) 用抛物线法}\label{ux7528ux629bux7269ux7ebfux6cd5}
+
+抛物线法使用三个点 \((x_0, f_0), (x_1, f_1), (x_2, f_2)\)
+构造一个二次多项式（抛物线），并取抛物线与 x 轴的交点作为下一个近似根。
+
+给定 \(x_0 = 1, x_1 = 3, x_2 = 2\)。
+
+\textbf{第 1 次迭代:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  计算函数值：
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(f(x_0) = f(1) = -3\)
+  \item
+    \(f(x_1) = f(3) = 17\)
+  \item
+    \(f(x_2) = f(2) = 1\)
+  \end{itemize}
+\item
+  构造经过这三点的抛物线
+  \(P(x) = a(x-x_2)^2 + b(x-x_2) + c\)。通过求解可以得到：
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(a = 6\)
+  \item
+    \(b = 10\)
+  \item
+    \(c = 1\)
+  \end{itemize}
+\item
+  求解 \(P(x)=0\) 得到下一个近似根 \(x_3\)：
+  \[ x_3 = x_2 - \frac{2c}{b + \operatorname{sgn}(b)\sqrt{b^2 - 4ac}} = 2 - \frac{2(1)}{10 + \sqrt{10^2 - 4(6)(1)}} = 2 - \frac{2}{10 + \sqrt{76}} \approx 1.893164 \]
+\end{enumerate}
+
+\textbf{第 2 次迭代:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  现在我们使用点
+  \(x_1=3, x_2=2, x_3=1.893164\)。为了获得更快的收敛，通常选择离新根最近的三个点。我们选择
+  \(x_0=1, x_2=2, x_3=1.893164\)。
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(f(1) = -3\)
+  \item
+    \(f(2) = 1\)
+  \item
+    \(f(1.893164) \approx 0.10048\)
+  \end{itemize}
+\item
+  用这三点重复上述过程，得到： \[ x_4 \approx 1.879535 \]
+\end{enumerate}
+
+\textbf{第 3 次迭代:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  使用点 \(x_2=2, x_3=1.893164, x_4=1.879535\)。
+\item
+  计算得到下一个近似根： \[ x_5 \approx 1.879385 \]
+\end{enumerate}
+
+经过 3 次迭代，计算结果稳定。结果 \texttt{1.879} 已经精确。
+因此，抛物线法求得的根为 \textbf{1.879}。
+
+    \section{14}\label{section}
+
+应用牛顿法于方程 \(f(x) = x^n - a = 0\) 和
+\(f(x) = 1 - \frac{a}{x^n} = 0\)，分别导出求 \(\sqrt[n] a\)
+的迭代公式，并求
+
+\[
+\lim_{k\to\infty} (\sqrt[n] a - x_{k + 1})/(\sqrt [n] a - x_k)^2
+\]
+
+\subsection{Solution}\label{solution}
+
+\subsubsection{\texorpdfstring{使用
+\(f(x) = x^n - a\)}{使用 f(x) = x\^{}n - a}}\label{ux4f7fux7528-fx-xn---a}
+
+牛顿法的迭代公式为：
+
+\[ x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)} \]
+
+对于 \(f(x) = x^n - a\)，其导数为 \(f'(x) = nx^{n-1}\)。
+
+将它们代入牛顿法公式：
+
+\[ x_{k+1} = x_k - \frac{x_k^n - a}{nx_k^{n-1}} \]
+
+\[ x_{k+1} = \frac{1}{n} \left( (n-1)x_k + \frac{a}{x_k^{n-1}} \right) \]
+
+令 \(x^* = \sqrt[n]{a}\) 为方程的根。牛顿法的误差关系通常由迭代函数
+\(g(x) = x - \frac{f(x)}{f'(x)}\) 在根 \(x^*\)
+处的泰勒展开得到。对于二次收敛，我们有：
+
+\[ x_{k+1} - x^* \approx \frac{g''(x^*)}{2}(x_k - x^*)^2 \]
+
+因此，
+
+\[ \lim_{k\to\infty} \frac{x_{k+1} - x^*}{(x_k - x^*)^2} = \frac{g''(x^*)}{2} \]
+
+我们要求的极限 \(L_1\) 是：
+
+\[ L_1 = \lim_{k\to\infty} \frac{-(x_{k+1} - x^*)}{(-(x_k - x^*))^2} = \lim_{k\to\infty} \frac{-(x_{k+1} - x^*)}{(x_k - x^*)^2} = -\frac{g''(x^*)}{2} \]
+
+我们知道 \(g''(x^*) = \frac{f''(x^*)}{f'(x^*)}\)。所以，
+
+\[ L_1 = -\frac{f''(x^*)}{2f'(x^*)} \]
+
+现在，我们计算 \(f(x)\) 的二阶导数：
+
+\begin{itemize}
+\tightlist
+\item
+  \(f'(x) = nx^{n-1}\)
+\item
+  \(f''(x) = n(n-1)x^{n-2}\)
+\end{itemize}
+
+在根 \(x^* = \sqrt[n]{a} = a^{1/n}\) 处求值：
+
+\begin{itemize}
+\tightlist
+\item
+  \(f'(x^*) = n(a^{1/n})^{n-1} = n a^{(n-1)/n}\)
+\item
+  \(f''(x^*) = n(n-1)(a^{1/n})^{n-2} = n(n-1)a^{(n-2)/n}\)
+\end{itemize}
+
+代入极限公式：
+
+\[ L_1 = -\frac{n(n-1)a^{(n-2)/n}}{2 \cdot n a^{(n-1)/n}} = -\frac{n-1}{2} a^{\frac{n-2}{n} - \frac{n-1}{n}} = -\frac{n-1}{2} a^{-1/n} \]
+
+所以，
+
+\[ \lim_{k\to\infty} \frac{\sqrt[n] a - x_{k + 1}}{(\sqrt [n] a - x_k)^2} = -\frac{n-1}{2\sqrt[n]{a}} \]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{使用
+\(f(x) = 1 - \frac{a}{x^n} = 1 - ax^{-n}\)}{使用 f(x) = 1 - \textbackslash frac\{a\}\{x\^{}n\} = 1 - ax\^{}\{-n\}}}\label{ux4f7fux7528-fx-1---fracaxn-1---ax-n}
+
+对于 \(f(x) = 1 - ax^{-n}\)，其导数为
+\(f'(x) = -a(-n)x^{-n-1} = anx^{-n-1}\)。
+
+代入牛顿法公式：
+
+\[ x_{k+1} = x_k - \frac{1 - ax_k^{-n}}{anx_k^{-n-1}} \]
+
+整理后得到迭代公式：
+
+\[ x_{k+1} = x_k \left( 1 + \frac{1}{n} \right) - \frac{x_k^{n+1}}{an} \]
+
+我们仍然使用公式 \(L_2 = -\frac{f''(x^*)}{2f'(x^*)}\)。
+
+首先计算 \(f(x)\) 的二阶导数：
+
+\begin{itemize}
+\tightlist
+\item
+  \(f'(x) = anx^{-n-1}\)
+\item
+  \(f''(x) = an(-n-1)x^{-n-2} = -an(n+1)x^{-n-2}\)
+\end{itemize}
+
+在根 \(x^* = \sqrt[n]{a} = a^{1/n}\) 处求值：
+
+\begin{itemize}
+\tightlist
+\item
+  \(f'(x^*) = an(a^{1/n})^{-n-1} = an a^{-(n+1)/n} = n a^{1 - (n+1)/n} = n a^{-1/n}\)
+\item
+  \(f''(x^*) = -an(n+1)(a^{1/n})^{-n-2} = -an(n+1)a^{-(n+2)/n} = -n(n+1)a^{1 - (n+2)/n} = -n(n+1)a^{-2/n}\)
+\end{itemize}
+
+代入极限公式：
+
+\[ L_2 = -\frac{-an(n+1)a^{-(n+2)/n}}{2 \cdot an a^{-(n+1)/n}} = \frac{n(n+1)a^{1-(n+2)/n}}{2na^{1-(n+1)/n}} = \frac{n+1}{2} a^{\frac{-2}{n} - (\frac{-1}{n})} = \frac{n+1}{2} a^{-1/n} \]
+
+所以，
+
+\[ \lim_{k\to\infty} \frac{\sqrt[n] a - x_{k + 1}}{(\sqrt [n] a - x_k)^2} = \frac{n+1}{2\sqrt[n]{a}} \]
+
+    \section{1}\label{section}
+
+用欧拉法解初值问题
+
+\[
+y' = x^2 + 100y^2, \quad y(0) = 0
+\]
+
+取步长 \(h = 0.1\)，计算到 \(x = 0.3\)（保留到小数点后四位）.
+
+\subsection{Solution}\label{solution}
+
+欧拉法的迭代公式为：
+
+\[ y_{i+1} = y_i + h \cdot f(x_i, y_i) \]
+
+对于本题，公式具体为：
+
+\[ y_{i+1} = y_i + 0.1 \cdot (x_i^2 + 100y_i^2) \]
+
+\textbf{计算 \(y(0.1)\)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(i=0\), \(x_0 = 0\), \(y_0 = 0\)
+\item
+  \(y_1 = y_0 + 0.1 \cdot (x_0^2 + 100y_0^2)\)
+\item
+  所以，\(y(0.1) \approx y_1 = 0.0000\)
+\end{itemize}
+
+\textbf{计算 \(y(0.2)\)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(i=1\), \(x_1 = 0.1\), \(y_1 = 0\)
+\item
+  \(y_2 = y_1 + 0.1 \cdot (x_1^2 + 100y_1^2)\)
+\item
+  所以，\(y(0.2) \approx y_2 = 0.0010\)
+\end{itemize}
+
+\textbf{计算 \(y(0.3)\)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(i=2\), \(x_2 = 0.2\), \(y_2 = 0.001\)
+\item
+  \(y_3 = y_2 + 0.1 \cdot (x_2^2 + 100y_2^2)\)
+\item
+  所以，\(y(0.3) \approx y_3 = 0.0050\) (保留四位小数)
+\end{itemize}
+
+用欧拉法计算到 \(x=0.3\) 的结果如下：
+
+\begin{itemize}
+\tightlist
+\item
+  \(y(0.1) \approx 0.0000\)
+\item
+  \(y(0.2) \approx 0.0010\)
+\item
+  \(y(0.3) \approx 0.0050\)
+\end{itemize}
+
+    \section{2}\label{section}
+
+用改进欧拉法和梯形法求解初值问题
+
+\[
+y' = x^2 + x - y,\quad y(0) = 0
+\]
+
+取步长 \(h = 0.1\)，计算到 \(x = 0.5\)，并与准确解
+\(y = -e^{-x} + x^2 - x + 1\) 相比较。
+
+\subsection{Solution}\label{solution}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{预测}: \(\bar{y}_{i+1} = y_i + h \cdot f(x_i, y_i)\)
+\item
+  \textbf{校正}:
+  \(y_{i+1} = y_i + \frac{h}{2} [f(x_i, y_i) + f(x_{i+1}, \bar{y}_{i+1})]\)
+\end{enumerate}
+
+\textbf{Step 1: 计算 y(0.1)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_0 = 0, y_0 = 0\)
+\item
+  \(f(x_0, y_0) = 0^2 + 0 - 0 = 0\)
+\item
+  预测: \(\bar{y}_1 = 0 + 0.1 \cdot 0 = 0\)
+\item
+  \(x_1 = 0.1\). \(f(x_1, \bar{y}_1) = 0.1^2 + 0.1 - 0 = 0.11\)
+\item
+  校正:
+  \(y_1 = 0 + \frac{0.1}{2} [0 + 0.11] = 0.05 \cdot 0.11 = \mathbf{0.005500}\)
+\end{itemize}
+
+\textbf{Step 2: 计算 y(0.2)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_1 = 0.1, y_1 = 0.005500\)
+\item
+  \(f(x_1, y_1) = 0.1^2 + 0.1 - 0.005500 = 0.104500\)
+\item
+  预测: \(\bar{y}_2 = 0.005500 + 0.1 \cdot 0.104500 = 0.015950\)
+\item
+  \(x_2 = 0.2\).
+  \(f(x_2, \bar{y}_2) = 0.2^2 + 0.2 - 0.015950 = 0.224050\)
+\item
+  校正:
+  \(y_2 = 0.005500 + \frac{0.1}{2} [0.104500 + 0.224050] = 0.005500 + 0.016428 = \mathbf{0.021928}\)
+\end{itemize}
+
+\textbf{Step 3: 计算 y(0.3)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_2 = 0.2, y_2 = 0.021928\)
+\item
+  \(f(x_2, y_2) = 0.2^2 + 0.2 - 0.021928 = 0.218072\)
+\item
+  预测: \(\bar{y}_3 = 0.021928 + 0.1 \cdot 0.218072 = 0.043735\)
+\item
+  \(x_3 = 0.3\).
+  \(f(x_3, \bar{y}_3) = 0.3^2 + 0.3 - 0.043735 = 0.346265\)
+\item
+  校正:
+  \(y_3 = 0.021928 + \frac{0.1}{2} [0.218072 + 0.346265] = 0.021928 + 0.028217 = \mathbf{0.050145}\)
+\end{itemize}
+
+\textbf{Step 4: 计算 y(0.4)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_3 = 0.3, y_3 = 0.050145\)
+\item
+  \(f(x_3, y_3) = 0.3^2 + 0.3 - 0.050145 = 0.339855\)
+\item
+  预测: \(\bar{y}_4 = 0.050145 + 0.1 \cdot 0.339855 = 0.084131\)
+\item
+  \(x_4 = 0.4\).
+  \(f(x_4, \bar{y}_4) = 0.4^2 + 0.4 - 0.084131 = 0.475869\)
+\item
+  校正:
+  \(y_4 = 0.050145 + \frac{0.1}{2} [0.339855 + 0.475869] = 0.050145 + 0.040786 = \mathbf{0.090931}\)
+\end{itemize}
+
+\textbf{Step 5: 计算 y(0.5)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_4 = 0.4, y_4 = 0.090931\)
+\item
+  \(f(x_4, y_4) = 0.4^2 + 0.4 - 0.090931 = 0.469069\)
+\item
+  预测: \(\bar{y}_5 = 0.090931 + 0.1 \cdot 0.469069 = 0.137838\)
+\item
+  \(x_5 = 0.5\).
+  \(f(x_5, \bar{y}_5) = 0.5^2 + 0.5 - 0.137838 = 0.612162\)
+\item
+  校正:
+  \(y_5 = 0.090931 + \frac{0.1}{2} [0.469069 + 0.612162] = 0.090931 + 0.054062 = \mathbf{0.144993}\)
+\end{itemize}
+
+梯形法的迭代公式是隐式的：
+
+\[ y_{i+1} = y_i + \frac{h}{2} [f(x_i, y_i) + f(x_{i+1}, y_{i+1})] \]
+
+由于本题的 \(f(x, y) = x^2 + x - y\) 是关于 \(y\)
+的线性函数，我们可以解出 \(y_{i+1}\) 得到一个显式公式：
+
+\[ y_{i+1} = y_i + \frac{h}{2} [(x_i^2 + x_i - y_i) + (x_{i+1}^2 + x_{i+1} - y_{i+1})] \]
+\[ y_{i+1} (1 + \frac{h}{2}) = y_i (1 - \frac{h}{2}) + \frac{h}{2} (x_i^2 + x_i + x_{i+1}^2 + x_{i+1}) \]
+\[ y_{i+1} = \frac{y_i (1 - h/2) + (h/2)(x_i^2 + x_i + x_{i+1}^2 + x_{i+1})}{1 + h/2} \]
+代入 \(h=0.1\)：
+\[ y_{i+1} = \frac{0.95 y_i + 0.05 (x_i^2 + x_i + x_{i+1}^2 + x_{i+1})}{1.05} \]
+
+\textbf{Step 1: 计算 y(0.1)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(y_1 = \frac{0.95(0) + 0.05(0^2+0+0.1^2+0.1)}{1.05} = \frac{0.0055}{1.05} = \mathbf{0.005238}\)
+\end{itemize}
+
+\textbf{Step 2: 计算 y(0.2)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(y_2 = \frac{0.95(0.005238) + 0.05(0.1^2+0.1+0.2^2+0.2)}{1.05} = \frac{0.004976 + 0.0175}{1.05} = \mathbf{0.021406}\)
+\end{itemize}
+
+\textbf{Step 3: 计算 y(0.3)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(y_3 = \frac{0.95(0.021406) + 0.05(0.2^2+0.2+0.3^2+0.3)}{1.05} = \frac{0.020336 + 0.0315}{1.05} = \mathbf{0.049402}\)
+\end{itemize}
+
+\textbf{Step 4: 计算 y(0.4)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(y_4 = \frac{0.95(0.049402) + 0.05(0.3^2+0.3+0.4^2+0.4)}{1.05} = \frac{0.046932 + 0.0475}{1.05} = \mathbf{0.089937}\)
+\end{itemize}
+
+\textbf{Step 5: 计算 y(0.5)}
+
+\begin{itemize}
+\tightlist
+\item
+  \(y_5 = \frac{0.95(0.089937) + 0.05(0.4^2+0.4+0.5^2+0.5)}{1.05} = \frac{0.085440 + 0.0655}{1.05} = \mathbf{0.143752}\)
+\end{itemize}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2286}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2143}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1429}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+x
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+改进欧拉法 \(y_i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+梯形法 \(y_i\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+准确解 \(y(x_i)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+改进欧拉法误差
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+梯形法误差
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.0 & 0.000000 & 0.000000 & 0.000000 & 0.000000 & 0.000000 \\
+0.1 & 0.005500 & 0.005238 & 0.005171 & 0.000329 & 0.000067 \\
+0.2 & 0.021928 & 0.021406 & 0.021401 & 0.000527 & 0.000005 \\
+0.3 & 0.050145 & 0.049402 & 0.049342 & 0.000803 & 0.000060 \\
+0.4 & 0.090931 & 0.089937 & 0.089815 & 0.001116 & 0.000122 \\
+0.5 & 0.144993 & 0.143752 & 0.143571 & 0.001422 & 0.000181 \\
+\end{longtable}
+
+    \section{5}\label{section}
+
+取 \(h = 0.2\)，用四阶经典的龙格-库塔方法求解下列初值问题：
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\tightlist
+\item
+\end{enumerate}
+
+\[
+\begin{cases}
+y' = x + y, & 0 < x < 1\\
+y(0) = 1
+\end{cases}
+\]
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+\end{enumerate}
+
+\[
+\begin{cases}
+y' = 3y/(1 + x), & 0 < x < 1 \\
+y(0) = 1
+\end{cases}
+\]
+
+\subsection{Solution}\label{solution}
+
+对于初值问题 \(y' = f(x, y)\), \(y(x_i) = y_i\)，计算下一个点的公式为：
+
+\[ y_{i+1} = y_i + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4) \]
+
+其中，步长为 \(h\)，各个系数计算如下：
+
+\begin{itemize}
+\tightlist
+\item
+  \(k_1 = h \cdot f(x_i, y_i)\)
+\item
+  \(k_2 = h \cdot f(x_i + \frac{h}{2}, y_i + \frac{k_1}{2})\)
+\item
+  \(k_3 = h \cdot f(x_i + \frac{h}{2}, y_i + \frac{k_2}{2})\)
+\item
+  \(k_4 = h \cdot f(x_i + h, y_i + k_3)\)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{(1) 求解
+\(y' = x + y\)}{(1) 求解 y\textquotesingle{} = x + y}}\label{ux6c42ux89e3-y-x-y}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{函数}: \(f(x, y) = x + y\)
+\item
+  \textbf{初始条件}: \(x_0 = 0, y_0 = 1\)
+\item
+  \textbf{步长}: \(h = 0.2\)
+\end{itemize}
+
+\paragraph{Step 1: 计算 y(0.2)}\label{step-1-ux8ba1ux7b97-y0.2}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_0 = 0, y_0 = 1\)
+\item
+  \(k_1 = 0.2 \cdot f(0, 1) = 0.2 \cdot (0 + 1) = 0.20000\)
+\item
+  \(k_2 = 0.2 \cdot f(0.1, 1 + 0.1) = 0.2 \cdot (0.1 + 1.1) = 0.24000\)
+\item
+  \(k_3 = 0.2 \cdot f(0.1, 1 + 0.12) = 0.2 \cdot (0.1 + 1.12) = 0.24400\)
+\item
+  \(k_4 = 0.2 \cdot f(0.2, 1 + 0.244) = 0.2 \cdot (0.2 + 1.244) = 0.28880\)
+\item
+  \(y_1 = 1 + \frac{1}{6}(0.2 + 2 \cdot 0.24 + 2 \cdot 0.244 + 0.2888) = \mathbf{1.24280}\)
+\end{itemize}
+
+\paragraph{Step 2: 计算 y(0.4)}\label{step-2-ux8ba1ux7b97-y0.4}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_1 = 0.2, y_1 = 1.24280\)
+\item
+  \(k_1 = 0.2 \cdot f(0.2, 1.24280) = 0.2 \cdot (0.2 + 1.24280) = 0.28856\)
+\item
+  \(k_2 = 0.2 \cdot f(0.3, 1.24280 + 0.14428) = 0.2 \cdot (0.3 + 1.38708) = 0.33742\)
+\item
+  \(k_3 = 0.2 \cdot f(0.3, 1.24280 + 0.16871) = 0.2 \cdot (0.3 + 1.41151) = 0.34230\)
+\item
+  \(k_4 = 0.2 \cdot f(0.4, 1.24280 + 0.34230) = 0.2 \cdot (0.4 + 1.58510) = 0.39702\)
+\item
+  \(y_2 = 1.24280 + \frac{1}{6}(0.28856 + 2 \cdot 0.33742 + 2 \cdot 0.34230 + 0.39702) = \mathbf{1.58365}\)
+\end{itemize}
+
+\paragraph{Step 3: 计算 y(0.6)}\label{step-3-ux8ba1ux7b97-y0.6}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_2 = 0.4, y_2 = 1.58365\)
+\item
+  \(k_1 = 0.2 \cdot (0.4 + 1.58365) = 0.39673\)
+\item
+  \(k_2 = 0.2 \cdot (0.5 + 1.58365 + 0.19837) = 0.45640\)
+\item
+  \(k_3 = 0.2 \cdot (0.5 + 1.58365 + 0.22820) = 0.46237\)
+\item
+  \(k_4 = 0.2 \cdot (0.6 + 1.58365 + 0.46237) = 0.52920\)
+\item
+  \(y_3 = 1.58365 + \frac{1}{6}(0.39673 + 2 \cdot 0.45640 + 2 \cdot 0.46237 + 0.52920) = \mathbf{2.04424}\)
+\end{itemize}
+
+\paragraph{Step 4: 计算 y(0.8)}\label{step-4-ux8ba1ux7b97-y0.8}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_3 = 0.6, y_3 = 2.04424\)
+\item
+  \(k_1 = 0.2 \cdot (0.6 + 2.04424) = 0.52885\)
+\item
+  \(k_2 = 0.2 \cdot (0.7 + 2.04424 + 0.26443) = 0.60173\)
+\item
+  \(k_3 = 0.2 \cdot (0.7 + 2.04424 + 0.30087) = 0.60902\)
+\item
+  \(k_4 = 0.2 \cdot (0.8 + 2.04424 + 0.60902) = 0.71065\)
+\item
+  \(y_4 = 2.04424 + \frac{1}{6}(0.52885 + 2 \cdot 0.60173 + 2 \cdot 0.60902 + 0.71065) = \mathbf{2.65108}\)
+\end{itemize}
+
+\paragraph{Step 5: 计算 y(1.0)}\label{step-5-ux8ba1ux7b97-y1.0}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_4 = 0.8, y_4 = 2.65108\)
+\item
+  \(k_1 = 0.2 \cdot (0.8 + 2.65108) = 0.69022\)
+\item
+  \(k_2 = 0.2 \cdot (0.9 + 2.65108 + 0.34511) = 0.79924\)
+\item
+  \(k_3 = 0.2 \cdot (0.9 + 2.65108 + 0.39962) = 0.81014\)
+\item
+  \(k_4 = 0.2 \cdot (1.0 + 2.65108 + 0.81014) = 0.89224\)
+\item
+  \(y_5 = 2.65108 + \frac{1}{6}(0.69022 + 2 \cdot 0.79924 + 2 \cdot 0.81014 + 0.89224) = \mathbf{3.43656}\)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{(2) 求解
+\(y' = 3y/(1 + x)\)}{(2) 求解 y\textquotesingle{} = 3y/(1 + x)}}\label{ux6c42ux89e3-y-3y1-x}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{函数}: \(f(x, y) = \frac{3y}{1+x}\)
+\item
+  \textbf{初始条件}: \(x_0 = 0, y_0 = 1\)
+\item
+  \textbf{步长}: \(h = 0.2\)
+\end{itemize}
+
+\paragraph{Step 1: 计算 y(0.2)}\label{step-1-ux8ba1ux7b97-y0.2-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_0 = 0, y_0 = 1\)
+\item
+  \(k_1 = 0.2 \cdot f(0, 1) = 0.2 \cdot \frac{3(1)}{1} = 0.60000\)
+\item
+  \(k_2 = 0.2 \cdot f(0.1, 1 + 0.3) = 0.2 \cdot \frac{3(1.3)}{1.1} = 0.70909\)
+\item
+  \(k_3 = 0.2 \cdot f(0.1, 1 + 0.35455) = 0.2 \cdot \frac{3(1.35455)}{1.1} = 0.73884\)
+\item
+  \(k_4 = 0.2 \cdot f(0.2, 1 + 0.73884) = 0.2 \cdot \frac{3(1.73884)}{1.2} = 0.86942\)
+\item
+  \(y_1 = 1 + \frac{1}{6}(0.6 + 2 \cdot 0.70909 + 2 \cdot 0.73884 + 0.86942) = \mathbf{1.72738}\)
+\end{itemize}
+
+\paragraph{Step 2: 计算 y(0.4)}\label{step-2-ux8ba1ux7b97-y0.4-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_1 = 0.2, y_1 = 1.72738\)
+\item
+  \(k_1 = 0.2 \cdot f(0.2, 1.72738) = 0.2 \cdot \frac{3(1.72738)}{1.2} = 0.86369\)
+\item
+  \(k_2 = 0.2 \cdot f(0.3, 1.72738 + 0.43185) = 0.2 \cdot \frac{3(2.15923)}{1.3} = 0.99657\)
+\item
+  \(k_3 = 0.2 \cdot f(0.3, 1.72738 + 0.49829) = 0.2 \cdot \frac{3(2.22567)}{1.3} = 1.02723\)
+\item
+  \(k_4 = 0.2 \cdot f(0.4, 1.72738 + 1.02723) = 0.2 \cdot \frac{3(2.75461)}{1.4} = 1.18055\)
+\item
+  \(y_2 = 1.72738 + \frac{1}{6}(0.86369 + 2 \cdot 0.99657 + 2 \cdot 1.02723 + 1.18055) = \mathbf{2.74398}\)
+\end{itemize}
+
+\paragraph{Step 3: 计算 y(0.6)}\label{step-3-ux8ba1ux7b97-y0.6-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_2 = 0.4, y_2 = 2.74398\)
+\item
+  \(k_1 = 0.2 \cdot \frac{3(2.74398)}{1.4} = 1.17599\)
+\item
+  \(k_2 = 0.2 \cdot \frac{3(2.74398 + 0.58800)}{1.5} = 1.33300\)
+\item
+  \(k_3 = 0.2 \cdot \frac{3(2.74398 + 0.66650)}{1.5} = 1.36420\)
+\item
+  \(k_4 = 0.2 \cdot \frac{3(2.74398 + 1.36420)}{1.6} = 1.54057\)
+\item
+  \(y_3 = 2.74398 + \frac{1}{6}(1.17599 + 2 \cdot 1.33300 + 2 \cdot 1.36420 + 1.54057) = \mathbf{4.19428}\)
+\end{itemize}
+
+\paragraph{Step 4: 计算 y(0.8)}\label{step-4-ux8ba1ux7b97-y0.8-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_3 = 0.6, y_3 = 4.19428\)
+\item
+  \(k_1 = 0.2 \cdot \frac{3(4.19428)}{1.6} = 1.57286\)
+\item
+  \(k_2 = 0.2 \cdot \frac{3(4.19428 + 0.78643)}{1.7} = 1.75790\)
+\item
+  \(k_3 = 0.2 \cdot \frac{3(4.19428 + 0.87895)}{1.7} = 1.79055\)
+\item
+  \(k_4 = 0.2 \cdot \frac{3(4.19428 + 1.79055)}{1.8} = 1.99494\)
+\item
+  \(y_4 = 4.19428 + \frac{1}{6}(1.57286 + 2 \cdot 1.75790 + 2 \cdot 1.79055 + 1.99494) = \mathbf{5.83196}\)
+\end{itemize}
+
+\paragraph{Step 5: 计算 y(1.0)}\label{step-5-ux8ba1ux7b97-y1.0-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \(x_4 = 0.8, y_4 = 5.83196\)
+\item
+  \(k_1 = 0.2 \cdot \frac{3(5.83196)}{1.8} = 1.94399\)
+\item
+  \(k_2 = 0.2 \cdot \frac{3(5.83196 + 0.97200)}{1.9} = 2.14862\)
+\item
+  \(k_3 = 0.2 \cdot \frac{3(5.83196 + 1.07431)}{1.9} = 2.18094\)
+\item
+  \(k_4 = 0.2 \cdot \frac{3(5.83196 + 2.18094)}{2.0} = 2.40387\)
+\item
+  \(y_5 = 5.83196 + \frac{1}{6}(1.94399 + 2 \cdot 2.14862 + 2 \cdot 2.18094 + 2.40387) = \mathbf{7.99993}\)
+\end{itemize}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+x & 问题 (1) \(y_i\) & 问题 (2) \(y_i\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.0 & 1.00000 & 1.00000 \\
+0.2 & 1.24280 & 1.72738 \\
+0.4 & 1.58365 & 2.74398 \\
+0.6 & 2.04424 & 4.19428 \\
+0.8 & 2.65108 & 5.83196 \\
+1.0 & 3.43656 & 7.99993 \\
+\end{longtable}
+
+\emph{问题(1)的准确解为 \(y(x) = 2e^x - x - 1\)，在 \(x=1\) 处
+\(y(1) \approx 3.43656\)。问题(2)的准确解为 \(y(x) = (1+x)^3\)，在
+\(x=1\) 处 \(y(1) = 8\)。可以看出RK4方法具有很高的精度。}
+
+    \section{3}\label{section}
+
+用梯形方法解初值问题
+
+\[
+\begin{cases}
+y' + y = 0\\
+y(0) = 1
+\end{cases}
+\]
+
+证明其近似解为
+
+\[
+y_n = \left( \frac{2 - h}{2 + h} \right)^n
+\]
+
+并证明当 \(h \to 0\) 时，它收敛于原初值问题的准确解 \(y = e^{-x}\)
+
+\subsection{Solution}\label{solution}
+
+首先，我们将初值问题写成标准形式 \(y' = f(x, y)\)。
+\[ y' + y = 0 \implies y' = -y \] 所以，\(f(x, y) = -y\)。
+
+梯形法的迭代公式为：
+
+\[ y_{n+1} = y_n + \frac{h}{2} [f(x_n, y_n) + f(x_{n+1}, y_{n+1})] \]
+
+将 \(f(x, y) = -y\) 代入公式：
+
+\[ y_{n+1} = y_n + \frac{h}{2} [-y_n - y_{n+1}] \]
+
+这是一个关于 \(y_{n+1}\) 的隐式方程，我们需要解出 \(y_{n+1}\)
+来得到一个显式的递推关系。
+
+\[ y_{n+1} = y_n - \frac{h}{2}y_n - \frac{h}{2}y_{n+1} \]
+
+解出 \(y_{n+1}\)：
+
+\[ y_{n+1} = y_n \left( \frac{2 - h}{2 + h} \right) \]
+
+这是一个公比为 \(r = \frac{2-h}{2+h}\) 的几何级数。其通项公式为
+\(y_n = y_0 \cdot r^n\)。
+
+根据初始条件 \(y(0) = 1\)，我们有 \(y_0 = 1\)。
+
+因此，近似解的通项公式为：
+
+\[ y_n = 1 \cdot \left( \frac{2 - h}{2 + h} \right)^n = \left( \frac{2 - h}{2 + h} \right)^n \]
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+我们要在任意一个固定的点 \(x\) 处考察当 \(h \to 0\) 时近似解 \(y_n\)
+的极限。
+
+\(x\) 与步数 \(n\) 和步长 \(h\) 的关系是 \(x = nh\)。这意味着当
+\(h \to 0\) 时，为了到达同一点 \(x\)，步数 \(n\) 必须趋向于无穷大
+(\(n = x/h\))。
+
+我们将 \(n = x/h\) 代入近似解的表达式中：
+\[ y_n(x) = \left( \frac{2 - h}{2 + h} \right)^{x/h} \] 现在，我们计算当
+\(h \to 0\) 时的极限：
+\[ \lim_{h \to 0} y_n(x) = \lim_{h \to 0} \left( \frac{2 - h}{2 + h} \right)^{x/h} \]
+这是一个 \(1^\infty\) 型的未定式。我们可以使用标准极限
+\(\lim_{z \to 0} (1+z)^{1/z} = e\) 来求解。
+
+令
+\(L = \lim_{h \to 0} \left( \frac{2 - h}{2 + h} \right)^{x/h}\)。我们先取对数：
+\[ \ln L = \lim_{h \to 0} \ln \left[ \left( \frac{2 - h}{2 + h} \right)^{x/h} \right] = \lim_{h \to 0} \frac{x}{h} \ln \left( \frac{2 - h}{2 + h} \right) \]
+\[ \ln L = x \cdot \lim_{h \to 0} \frac{\ln(2 - h) - \ln(2 + h)}{h} \]
+这是一个 \(0/0\)
+型的未定式，我们可以使用洛必达法则。对分子和分母分别关于 \(h\) 求导：
+\[ \lim_{h \to 0} \frac{\frac{-1}{2-h} - \frac{1}{2+h}}{1} = \frac{\frac{-1}{2} - \frac{1}{2}}{1} = -1 \]
+将这个结果代回 \(\ln L\) 的表达式： \[ \ln L = x \cdot (-1) = -x \]
+因此， \[ L = e^{-x} \] 这表明，当 \(h \to 0\) 时，梯形法的近似解
+\(y_n\) 收敛于准确解 \(y(x) = e^{-x}\)。 \textbf{第二部分证毕。}
+
+    \section{7}\label{section}
+
+证明中点公式
+
+\[
+y_{n + 1} = y_n + hf(x_n + \frac{h}{2}, y_n + \frac{1}{2}hf(x_n, y_n))
+\]
+
+是二阶的。
+
+\subsection{Proof}\label{proof}
+
+将 \(y(x_{n+1}) = y(x_n + h)\) 在 \(x_n\) 处进行泰勒展开，至少展开到
+\(h^3\) 项：
+
+\[ y(x_n + h) = y(x_n) + h y'(x_n) + \frac{h^2}{2} y''(x_n) + \frac{h^3}{6} y'''(x_n) + O(h^4) \]
+
+现在，我们用 \(f(x, y)\) 来表示 \(y\) 的各阶导数（为简洁，省略变量
+\((x_n, y(x_n))\)）：
+
+\begin{itemize}
+\tightlist
+\item
+  \(y' = f\)
+\item
+  \(y'' = \frac{d}{dx}f(x, y(x)) = \frac{\partial f}{\partial x} + \frac{\partial f}{\partial y} \frac{dy}{dx} = f_x + f_y f\)
+\item
+  \(y''' = \frac{d}{dx}(f_x + f_y f) = (f_{xx} + f_{xy}f) + (f_{yx} + f_{yy}f)f + f_y(f_x + f_y f) = f_{xx} + 2f_{xy}f + f_{yy}f^2 + f_y f_x + f_y^2 f\)
+\end{itemize}
+
+代入 \(y(x_n+h)\) 的展开式：
+
+\[ y(x_n + h) = y(x_n) + hf + \frac{h^2}{2}(f_x + f_y f) + \frac{h^3}{6}(f_{xx} + 2f_{xy}f + \dots) + O(h^4) \quad (*)\]
+
+中点公式为：
+
+\[ y_{n+1} = y_n + h f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2}f(x_n, y_n)\right) \]
+
+对核心项 \(f(\dots)\) 进行二元泰勒展开。令 \(\Delta x = h/2\) 和
+\(\Delta y = \frac{h}{2}f(x_n, y_n)\)，在点 \((x_n, y_n)\) 附近展开
+\(f(x_n + \Delta x, y_n + \Delta y)\)：
+
+\[ f(x_n + \Delta x, y_n + \Delta y) = f + \Delta x f_x + \Delta y f_y + \frac{1}{2!}(\Delta x^2 f_{xx} + 2\Delta x \Delta y f_{xy} + \Delta y^2 f_{yy}) + O(h^3) \]
+
+将 \(\Delta x\) 和 \(\Delta y\) 代入：
+
+\[ f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2}f\right) = f + \left(\frac{h}{2}\right)f_x + \left(\frac{h}{2}f\right)f_y + \frac{1}{2}\left[\left(\frac{h}{2}\right)^2 f_{xx} + 2\left(\frac{h}{2}\right)\left(\frac{h}{2}f\right)f_{xy} + \left(\frac{h}{2}f\right)^2 f_{yy}\right] + O(h^3) \]
+
+整理上式：
+
+\[ f\left(x_n + \frac{h}{2}, y_n + \frac{h}{2}f\right) = f + \frac{h}{2}(f_x + f_y f) + \frac{h^2}{8}(f_{xx} + 2f_{xy}f + f_{yy}f^2) + O(h^3) \]
+
+现在，将这个展开式代回中点公式 \(y_{n+1}\)：
+
+\[ y_{n+1} = y_n + h \left[ f + \frac{h}{2}(f_x + f_y f) + \frac{h^2}{8}(f_{xx} + \dots) + O(h^3) \right] \]
+
+\[ y_{n+1} = y_n + hf + \frac{h^2}{2}(f_x + f_y f) + \frac{h^3}{8}(f_{xx} + \dots) + O(h^4) \quad (**) \]
+
+现在我们计算 \(\tau_{n+1} = y(x_{n+1}) - y_{n+1}\)，即用式 \((*)\)
+减去式 \((**)\)（假设 \(y_n = y(x_n)\)）：
+\[ \tau_{n+1} = \left[ y(x_n) + hf + \frac{h^2}{2}(f_x + f_y f) + \frac{h^3}{6}y''' + \dots \right] - \left[ y(x_n) + hf + \frac{h^2}{2}(f_x + f_y f) + \frac{h^3}{8}(\dots) + \dots \right] \]
+可以看到误差中剩下的最低阶项是 \(h^3\) 阶项。
+
+\[ \tau_{n+1} = \left(\frac{h^3}{6}y''' - \frac{h^3}{8}(f_{xx} + 2f_{xy}f + f_{yy}f^2)\right) + O(h^4) \]
+
+\[ \tau_{n+1} = C \cdot h^3 + O(h^4) \]
+
+其中 \(C\) 是一个不依赖于 \(h\) 的常数。
+
+由于局部截断误差 \(\tau_{n+1}\) 的首项是 \(h^3\) 阶的，即
+\(\tau_{n+1} = O(h^3)\)，因此根据定义，\textbf{中点公式是二阶方法}。
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
